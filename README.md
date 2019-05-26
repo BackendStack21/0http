@@ -6,11 +6,16 @@ Cero friction HTTP request router. The need for speed!
 const cero = require('0http')
 const { router, server } = cero()
 
-const HTTP_METHOD = 'GET'
-router.on(HTTP_METHOD, '/hi', (req, res) => {
+router.on('GET', '/hello', (req, res) => {
   res.end('Hello World!')
 })
 
+router.on('POST', '/do', (req, res) => {
+
+  res.statusCode = 201
+  res.end()
+})
+//...
 
 server.listen(3000)
 ```

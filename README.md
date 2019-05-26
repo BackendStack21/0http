@@ -4,18 +4,18 @@ Cero friction HTTP request router. The need for speed!
 ## Usage
 ```js
 const cero = require('0http')
+const { router, server } = cero()
 
-const { 
-  router,   // https://www.npmjs.com/package/find-my-way
-  server    // https://nodejs.org/api/http.html#http_class_http_server
-} = cero()
-
-router.on('GET', '/hi', (req, res) => {
+const HTTP_METHOD = 'GET'
+router.on(HTTP_METHOD, '/hi', (req, res) => {
   res.end('Hello World!')
 })
 
+
 server.listen(3000)
 ```
+> See router API: https://www.npmjs.com/package/find-my-way  
+> See server API: https://nodejs.org/api/http.html#http_class_http_server
 
 ## Benchmarks
 Node version: v10.14.1  

@@ -1,15 +1,17 @@
 const cero = require('../index')
-const { router, server } = cero()
+const { router, server } = cero({
+  router: require('./../lib/router/sequential')()
+})
 
-router.on('GET', '/', (req, res) => {
+router.get('/', (req, res) => {
   res.end()
 })
 
-router.on('GET', '/user/:id', (req, res, params) => {
-  res.end(params.id)
+router.get('/user/:id', (req, res) => {
+  res.end(req.params.id)
 })
 
-router.on('POST', '/user', (req, res) => {
+router.post('/user', (req, res) => {
   res.end()
 })
 

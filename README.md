@@ -1,5 +1,9 @@
 # 0http
-Cero friction HTTP request router. The need for speed!  
+Cero friction HTTP framework:
+- Tweaked Node.js Server for high throughput.
+- The request router you like. 
+
+> If no router is provided, it uses the `find-my-way` router as default implementation.
 
 ## Usage
 ```js
@@ -11,28 +15,94 @@ router.on('GET', '/hello', (req, res) => {
 })
 
 router.on('POST', '/do', (req, res) => {
-
+  // ...
   res.statusCode = 201
   res.end()
 })
+
 //...
 
 server.listen(3000)
 ```
-> See router API: https://www.npmjs.com/package/find-my-way  
-> See server API: https://nodejs.org/api/http.html#http_class_http_server
 
-## Benchmarks
-Node version: v10.14.1  
+## Routers
+`0http` allows you to define the router implementation you prefer as soon as it support the following interface:
+```js
+router.lookup = (req, res) // -> should trigger router search and handlers execution
+```
+### find-my-way router
+> https://github.com/delvedor/find-my-way  
+
+This is the default router in `0http` if no router is provided via configuration. Internally uses a [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) 
+router that will bring better performance over iterative regular expressions matching. 
+
+### 0http - sequential
+This a `0http` extended implementation of the [trouter](https://www.npmjs.com/package/trouter) router. Includes support for middlewares and shortcuts for routes registration.  
+As this is an iterative regular expression matching router, it tends to be slower than `find-my-way` when the number of registered routes increases. However, tiny micro-services should not see major performance degradation.  
+
+Supported HTTP verbs: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
+
+```js
+const cero = require('0http')
+const { router, server } = cero({
+  router: require('0http/lib/router/sequential')()
+})
+
+router.use('/', (req, res, next) => {
+  res.write('Hello ')
+  next()
+})
+
+const routeMiddleware = (req, res, next) => {
+  res.write('World')
+  next()
+}
+router.get('/sayhi', routeMiddleware, (req, res) => {
+  res.end('!')
+})
+
+server.listen(3000)
+```
+#### Async middlewares
+You can user async middlewares to await the remaining chain execution:
+```js
+router.use('/', async (req, res, next) => {
+  try {
+    await next()
+  } catch (err) {
+    res.statusCode = 500
+    res.end(err.message)
+  }
+})
+
+router.get('/sayhi', () => { throw new Error('Uuuups!') }, (req, res) => {
+  res.end('!')
+})
+```
+
+## Benchmarks (21/07/2019)
+Node version: v10.16.0
 Laptop: MacBook Pro 2016, 2,7 GHz Intel Core i7, 16 GB 2133 MHz LPDDR3
 
 ```bash
-wrk -t8 -c50 -d5s http://127.0.0.1:3000/hi
+wrk -t8 -c8 -d5s http://127.0.0.1:3000/hi
 ```
 
-- 0http v1.x            
-  `Requests/sec:  54931.66`
-- restana v2.10.x       
-  `Requests/sec:  53753.83`
+### 1 route registered
+- 0http (find-my-way) 
+  `Requests/sec:  680101.15`
+- 0http (sequential) 
+  `Requests/sec:  67124.65`
+- restana v3.3.1       
+  `Requests/sec:  59519.98`
 
-> **Note**: `restana` is already the fastest Node.js framework listed in https://github.com/the-benchmarker/web-frameworks
+### 5 routes registered
+- 0http (find-my-way) 
+  `Requests/sec:  68067.34`
+- 0http (sequential) 
+  `Requests/sec:  64141.28`
+- restana v3.3.1       
+  `Requests/sec:  59501.34`
+
+> For more accurate benchmarks please see:
+- https://github.com/the-benchmarker/web-frameworks

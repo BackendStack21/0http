@@ -1,12 +1,10 @@
 /* global describe, it */
 const expect = require('chai').expect
 const request = require('supertest')
-const uWS = require('uWebSockets.js')
 
 describe('0http Web Framework - Smoke', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
-  let socket
   const { router, server } = require('./index')({
     server: require('./lib/server/low')(),
     router: require('./lib/router/sequential')()
@@ -39,9 +37,8 @@ describe('0http Web Framework - Smoke', () => {
 
     router.all('/sheet.css', (req, res) => res.end())
 
-    server.listen(~~process.env.PORT, serverSocket => {
+    server.start(~~process.env.PORT, serverSocket => {
       if (serverSocket) {
-        socket = serverSocket
         done()
       }
     })
@@ -103,6 +100,6 @@ describe('0http Web Framework - Smoke', () => {
   })
 
   it('should successfully terminate the service', async () => {
-    uWS.us_listen_socket_close(socket)
+    server.close()
   })
 })

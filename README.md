@@ -79,16 +79,61 @@ router.get('/sayhi', () => { throw new Error('Uuuups!') }, (req, res) => {
   res.end('!')
 })
 ```
+## Servers
+`0http` is just a wrapper for the servers and routers implementations you provide. 
+```js
+const cero = require('0http')
 
-## Benchmarks (21/07/2019)
-Node version: v10.16.0
-Laptop: MacBook Pro 2016, 2,7 GHz Intel Core i7, 16 GB 2133 MHz LPDDR3
+const { router, server } = cero({
+  server: yourCustomServerInstance
+})
+```
+
+### Node.js http.Server 
+If no server is provided by configuration, the standard Node.js [http.Server](https://nodejs.org/api/http.html#http_class_http_server) implementation is used.  
+Because this server offers the best balance between Node.js ecosystem compatibility and performance, we highly recommend it for most use cases.
+
+### Low Server
+`low` is a tiny Node.js friendly wrapper around the great [uWebSockets.js](https://github.com/uNetworking/uWebSockets.js) HTTP server. I/O throughput is 
+maximized at the cost of API compatibility.
+> As far as for Node.js, `uWebSockets.js` brings the best I/O performance in terms of HTTP support.
+
+#### Install dependencies
+```
+npm i uNetworking/uWebSockets.js#v15.11.0
+```
+#### Example usage
+```js
+const low = require('0http/lib/server/low')
+const cero = require('0http')
+
+const { router, server } = cero({
+  server: low()
+})
+
+router.on('GET', '/hi', (req, res) => {
+  res.end('Hello World!')
+})
+
+server.listen(3000, (running) => {
+  if (running) {
+    console.log('HTTP server ready!')
+  }
+})
+```
+
+## Benchmarks (22/07/2019)
+**Node version**: v10.16.0  
+**Laptop**: MacBook Pro 2016, 2,7 GHz Intel Core i7, 16 GB 2133 MHz LPDDR3  
+**Server**: Single instance
 
 ```bash
 wrk -t8 -c8 -d5s http://127.0.0.1:3000/hi
 ```
 
 ### 1 route registered
+- **0http (find-my-way + low)**
+  `Requests/sec:  121006.70`
 - 0http (find-my-way) 
   `Requests/sec:  680101.15`
 - 0http (sequential) 

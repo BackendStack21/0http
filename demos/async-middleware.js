@@ -1,7 +1,8 @@
+const sequential = require('../lib/router/sequential')
 const cero = require('../index')
 
 const { router, server } = cero({
-  router: require('../lib/router/sequential')()
+  router: sequential()
 })
 
 router.use('/', async (req, res, next) => {

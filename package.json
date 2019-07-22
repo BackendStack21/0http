@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/jkyberneees/0http#readme",
   "devDependencies": {
-    "standard": "^13.0.2"
+    "standard": "^13.0.2",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.11.0"
   },
   "dependencies": {
     "find-my-way": "^2.1.0",

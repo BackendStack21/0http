@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "standard": "^13.0.2",
+    "standard": "^13.1.0",
     "supertest": "^4.0.2",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.11.0"
   },

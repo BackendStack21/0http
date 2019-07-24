@@ -120,7 +120,12 @@ server.listen(3000, (socket) => {
     console.log('HTTP server ready!')
   }
 })
+
+
+// ...
+server.close()
 ```
+
 
 ## Benchmarks (22/07/2019)
 **Node version**: v10.16.0  

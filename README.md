@@ -140,7 +140,7 @@ wrk -t8 -c8 -d5s http://127.0.0.1:3000/hi
 - **0http (find-my-way + low)**
   `Requests/sec:  121006.70`
 - 0http (find-my-way) 
-  `Requests/sec:  680101.15`
+  `Requests/sec:  68101.15`
 - 0http (sequential) 
   `Requests/sec:  67124.65`
 - restana v3.3.1       

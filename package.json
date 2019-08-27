@@ -28,7 +28,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.0",
     "nyc": "^14.1.1",
-    "standard": "^13.1.0",
+    "standard": "^14.0.2",
     "supertest": "^4.0.2",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v15.11.0"
   },

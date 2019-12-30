@@ -1,20 +1,18 @@
 # 0http
 Cero friction HTTP framework:
 - Tweaked Node.js Server for high throughput.
-- The request router you like. 
-
-> If no router is provided, it uses the `find-my-way` router as default implementation.
+- Use the request router you like. 
 
 ## Usage
 ```js
 const cero = require('0http')
 const { router, server } = cero()
 
-router.on('GET', '/hello', (req, res) => {
+router.get('/hello', (req, res) => {
   res.end('Hello World!')
 })
 
-router.on('POST', '/do', (req, res) => {
+router.post('/do', (req, res) => {
   // ...
   res.statusCode = 201
   res.end()
@@ -30,41 +28,49 @@ server.listen(3000)
 ```js
 router.lookup = (req, res) // -> should trigger router search and handlers execution
 ```
-### find-my-way router
-> https://github.com/delvedor/find-my-way  
 
-This is the default router in `0http` if no router is provided via configuration. Internally uses a [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) 
-router that will bring better performance over iterative regular expressions matching. 
-
-### 0http - sequential
-This a `0http` extended implementation of the [trouter](https://www.npmjs.com/package/trouter) router. Includes support for middlewares and shortcuts for routes registration.  
-As this is an iterative regular expression matching router, it tends to be slower than `find-my-way` when the number of registered routes increases. However, tiny micro-services should not see major performance degradation.  
+### 0http - sequential (default router)
+This a `0http` extended implementation of the [trouter](https://www.npmjs.com/package/trouter) router. Includes support for middlewares, nested routers and shortcuts for routes registration.  
+As this is an iterative regular expression matching router, it tends to be slower than `find-my-way` when the number of registered routes increases; to mitigate this issue, we use 
+an internal LRU cache to store the matching results of the previous requests, resulting on a super-fast matching process.
 
 Supported HTTP verbs: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
 
 ```js
 const cero = require('0http')
-const { router, server } = cero({
-  router: require('0http/lib/router/sequential')()
-})
+const { router, server } = cero({})
 
+// global middleware example
 router.use('/', (req, res, next) => {
   res.write('Hello ')
   next()
 })
 
+// route middleware example
 const routeMiddleware = (req, res, next) => {
   res.write('World')
   next()
 }
+
+// GET /sayhi route with middleware and handler
 router.get('/sayhi', routeMiddleware, (req, res) => {
   res.end('!')
 })
 
 server.listen(3000)
 ```
+#### Configuration Options
+- **defaultRoute**: Route handler when there is no router matching. Default value:
+  ```js 
+  (req, res) => {
+    res.statusCode = 404
+    res.end()
+  }
+  ```
+- **cacheSize**: Router matching LRU cache size. Default value: `1000`
+
 #### Async middlewares
-You can user async middlewares to await the remaining chain execution:
+You can user async middlewares to await the remaining chain execution. Let's describe with a custom error handler middleware:
 ```js
 router.use('/', async (req, res, next) => {
   try {
@@ -75,10 +81,45 @@ router.use('/', async (req, res, next) => {
   }
 })
 
-router.get('/sayhi', () => { throw new Error('Uuuups!') }, (req, res) => {
-  res.end('!')
+router.get('/sayhi', (req, res) => {
+  throw new Error('Uuuups!')
 })
 ```
+
+#### Nested Routers
+You can simply use `sequential` router intances as nested routers:
+```js
+const cero = require('../index')
+const { router, server } = cero({})
+
+const nested = require('0http/lib/router/sequential')()
+nested.get('/url', (req, res, next) => {
+  res.end(req.url)      
+})
+router.use('/v1', nested)
+
+server.listen(3000)
+```
+
+### find-my-way router
+> https://github.com/delvedor/find-my-way  
+
+Super-fast raw HTTP router with no goodies. Internally uses a [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) 
+router that will bring better performance over iterative regular expressions matching. 
+```js
+const cero = require('../index')
+const { router, server } = cero({
+  router: require('find-my-way')()
+})
+
+router.on('GET', '/hi', (req, res) => {
+  res.end('Hello World!')
+})
+
+server.listen(3000)
+```
+
+
 ## Servers
 `0http` is just a wrapper for the servers and routers implementations you provide. 
 ```js
@@ -111,7 +152,7 @@ const { router, server } = cero({
   server: low()
 })
 
-router.on('GET', '/hi', (req, res) => {
+router.get('/hi', (req, res) => {
   res.end('Hello World!')
 })
 
@@ -126,33 +167,32 @@ server.listen(3000, (socket) => {
 server.close()
 ```
 
-
-## Benchmarks (22/07/2019)
-**Node version**: v10.16.0  
-**Laptop**: MacBook Pro 2016, 2,7 GHz Intel Core i7, 16 GB 2133 MHz LPDDR3  
+## Benchmarks (30/12/2019)
+**Node version**: v12.14.0  
+**Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4  
 **Server**: Single instance
 
 ```bash
-wrk -t8 -c8 -d5s http://127.0.0.1:3000/hi
+wrk -t8 -c40 -d5s http://127.0.0.1:3000/hi
 ```
 
 ### 1 route registered
-- **0http (find-my-way + low)**
-  `Requests/sec:  121006.70`
-- 0http (find-my-way) 
-  `Requests/sec:  68101.15`
-- 0http (sequential) 
-  `Requests/sec:  67124.65`
-- restana v3.3.1       
-  `Requests/sec:  59519.98`
+- **0http (find-my-way + low)**  
+  `Requests/sec:  135436.99`
+- 0http (sequential + low)  
+  `Requests/sec:  134281.32`
+- 0http (sequential)   
+  `Requests/sec:  88438.69`
+- 0http (find-my-way)   
+  `Requests/sec:  87597.44`
+- restana v3.4.2   
+  `Requests/sec:  73455.97`
 
 ### 5 routes registered
-- 0http (find-my-way) 
-  `Requests/sec:  68067.34`
-- 0http (sequential) 
-  `Requests/sec:  64141.28`
-- restana v3.3.1       
-  `Requests/sec:  59501.34`
+- **0http (sequential)**  
+  `Requests/sec:  85839.17`
+- 0http (find-my-way)   
+  `Requests/sec:  82682.86`
 
 > For more accurate benchmarks please see:
 > - https://github.com/the-benchmarker/web-frameworks

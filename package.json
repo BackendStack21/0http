@@ -1,12 +1,12 @@
 {
   "name": "0http",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
     "lint": "npx standard",
     "format": "npx standard --fix",
-    "test": "PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests.js"
+    "test": "PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/jkyberneees/0http#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "find-my-way": "^2.2.1",
     "mocha": "^6.2.2",
     "nyc": "^15.0.0",
     "standard": "^14.3.1",
@@ -33,7 +34,7 @@
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v16.4.0"
   },
   "dependencies": {
-    "find-my-way": "^2.1.0",
+    "lru-cache": "^5.1.1",
     "trouter": "^3.1.0"
   }
 }

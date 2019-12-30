@@ -5,7 +5,7 @@ const { router, server } = cero({
   router: sequential()
 })
 
-router.on('GET', '/hi', (req, res) => {
+router.get('/hi', (req, res) => {
   res.end('Hello World!')
 })
 

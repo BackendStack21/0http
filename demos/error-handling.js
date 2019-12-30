@@ -14,8 +14,12 @@ router.use('/', async (req, res, next) => {
   }
 })
 
-router.get('/sayhi', () => { throw new Error('Uuuups!') }, (req, res) => {
-  res.end('!')
+router.get('/err1', (req, res) => {
+  throw new Error('Uuuups!')
+})
+
+router.get('/err2', (req, res, next) => {
+  next(new Error('Uuuups!'))
 })
 
 server.listen(3000)

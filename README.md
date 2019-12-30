@@ -177,19 +177,19 @@ wrk -t8 -c40 -d5s http://127.0.0.1:3000/hi
 ```
 
 ### 1 route registered
-- **0http (find-my-way + low)**
+- **0http (find-my-way + low)**  
   `Requests/sec:  131785.42`
-- 0http (find-my-way) 
+- 0http (find-my-way)   
   `Requests/sec:  85393.34`
-- 0http (sequential) 
+- 0http (sequential)   
   `Requests/sec:  86067.46`
-- restana v3.4.2       
+- restana v3.4.2   
   `Requests/sec:  73455.97`
 
 ### 5 routes registered
-- **0http (sequential)**
+- **0http (sequential)**  
   `Requests/sec:  85839.17`
-- 0http (find-my-way) 
+- 0http (find-my-way)   
   `Requests/sec:  82682.86`
 
 > For more accurate benchmarks please see:

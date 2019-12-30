@@ -6,7 +6,6 @@ describe('0http Web Framework - Nested Routers', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
   const { router, server } = require('../index')({
-    server: require('../lib/server/low')(),
     router: require('../lib/router/sequential')()
   })
 
@@ -31,10 +30,8 @@ describe('0http Web Framework - Nested Routers', () => {
       next()
     })
 
-    server.start(~~process.env.PORT, serverSocket => {
-      if (serverSocket) {
-        done()
-      }
+    server.listen(~~process.env.PORT, err => {
+      if (!err) done()
     })
   })
 
@@ -56,10 +53,10 @@ describe('0http Web Framework - Nested Routers', () => {
       })
 
     await request(baseUrl)
-      .get('/r2/url')
+      .get('/r2/url?var=value')
       .expect(200)
       .then((response) => {
-        expect(response.text).to.equal('/r2/url:/url')
+        expect(response.text).to.equal('/r2/url?var=value:/url?var=value')
       })
   })
 

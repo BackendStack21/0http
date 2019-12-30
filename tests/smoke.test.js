@@ -11,6 +11,9 @@ describe('0http Web Framework - Smoke', () => {
   })
 
   it('should successfully register service routes', (done) => {
+    router.use((req, res, next) => next())
+    router.use('/', (req, res, next) => next())
+
     router.get('/pets/:id', function (req, res) {
       res.setHeader('content-type', 'application/json')
       res.end(JSON.stringify({
@@ -66,7 +69,7 @@ describe('0http Web Framework - Smoke', () => {
 
   it('should GET JSON response /pets/:id', async () => {
     await request(baseUrl)
-      .get('/pets/0')
+      .get('/pets/0?var=value')
       .expect(200)
       .then((response) => {
         expect(response.body.name).to.equal('Happy Cat')

@@ -169,7 +169,7 @@ server.close()
 
 ## Benchmarks (30/12/2019)
 **Node version**: v12.14.0  
-**Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4 
+**Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4  
 **Server**: Single instance
 
 ```bash

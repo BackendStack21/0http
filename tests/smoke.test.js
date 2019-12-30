@@ -5,9 +5,9 @@ const request = require('supertest')
 describe('0http Web Framework - Smoke', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
-  const { router, server } = require('./index')({
-    server: require('./lib/server/low')(),
-    router: require('./lib/router/sequential')()
+  const { router, server } = require('../index')({
+    server: require('../lib/server/low')(),
+    router: require('../lib/router/sequential')()
   })
 
   it('should successfully register service routes', (done) => {
@@ -30,12 +30,26 @@ describe('0http Web Framework - Smoke', () => {
       res.end(req.body)
     })
 
-    router.get('/headers', (req, res) => {
+    router.use('/headers', (req, res, next) => {
       res.setHeader('x-header', '1')
+      next()
+    })
+
+    router.get('/headers', (req, res) => {
       res.end(JSON.stringify(res.getHeaders()))
     })
 
     router.all('/sheet.css', (req, res) => res.end())
+
+    const nested = require('../lib/router/sequential')()
+    nested.get('/info', (req, res, next) => {
+      req.stepUrl = req.url
+      next()
+    })
+    router.use('/nested', nested)
+    router.get('/nested/*', (req, res, next) => {
+      res.end(`${req.stepUrl} - ${req.url}`)
+    })
 
     server.start(~~process.env.PORT, serverSocket => {
       if (serverSocket) {
@@ -97,6 +111,15 @@ describe('0http Web Framework - Smoke', () => {
     await request(baseUrl)
       .put('/sheet.css')
       .expect(200)
+  })
+
+  it('should hit GET /nested/info on nested router', async () => {
+    await request(baseUrl)
+      .get('/nested/info')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal('/info - /nested/info')
+      })
   })
 
   it('should successfully terminate the service', async () => {

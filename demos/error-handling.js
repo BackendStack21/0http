@@ -10,7 +10,7 @@ router.use('/', async (req, res, next) => {
     await next()
   } catch (err) {
     res.statusCode = 500
-    res.end(err.message)
+    res.end('Error Handler: ' + err.message)
   }
 })
 
@@ -20,6 +20,10 @@ router.get('/err1', (req, res) => {
 
 router.get('/err2', (req, res, next) => {
   next(new Error('Uuuups!'))
+})
+
+router.get('/async-err', async (req, res, next) => {
+  throw new Error('Uuuups!')
 })
 
 server.listen(3000)

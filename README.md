@@ -68,9 +68,26 @@ server.listen(3000)
   }
   ```
 - **cacheSize**: Router matching LRU cache size. Default value: `1000`
+- **errorHandler**: Global error handler function. Default value: 
+  ```js 
+  (err, req, res) => {
+    res.statusCode = 500
+    res.end(err.message)
+  }
+  ```
+
+Example passing configuration options:
+```js
+const sequential = require('0http/lib/router/sequential')
+const { router, server } = cero({
+  router: sequential({
+    cacheSize: 2000
+  })
+})
+```
 
 #### Async middlewares
-You can user async middlewares to await the remaining chain execution. Let's describe with a custom error handler middleware:
+You can use async middlewares to await the remaining chain execution. Let's describe with a custom error handler middleware:
 ```js
 router.use('/', async (req, res, next) => {
   try {

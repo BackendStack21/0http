@@ -15,20 +15,19 @@ describe('0http Web Framework - Nested Routers', () => {
       req.body = req.url
       next()
     })
-
-    const router2 = require('../lib/router/sequential')()
-    router2.get('/url', (req, res, next) => {
-      req.body = req.url
-      next()
-    })
-    router.use('/r2', router2)
     router.use('/r1', router1)
-
-    router.use('/*', (req, res, next) => {
+    router.use('/r1', (req, res, next) => {
       res.end(req.url + ':' + req.body)
 
       next()
     })
+
+    const router2 = require('../lib/router/sequential')()
+    router2.get('/url/:age', (req, res, next) => {
+      req.params.age = ~~req.params.age
+      res.end(JSON.stringify(req.params))
+    })
+    router.use('/r2/:name', router2)
 
     server.listen(~~process.env.PORT, err => {
       if (!err) done()
@@ -44,19 +43,24 @@ describe('0http Web Framework - Nested Routers', () => {
       .expect(404)
   })
 
-  it('should hit GET /url on nested routers', async () => {
+  it('should hit GET /url on nested router /r1', async () => {
     await request(baseUrl)
       .get('/r1/url')
       .expect(200)
       .then((response) => {
         expect(response.text).to.equal('/r1/url:/url')
       })
+  })
 
+  it('should hit GET /url/:age on nested router /r2/:name', async () => {
     await request(baseUrl)
-      .get('/r2/url?var=value')
+      .get('/r2/rolando/url/33?var=value')
       .expect(200)
       .then((response) => {
-        expect(response.text).to.equal('/r2/url?var=value:/url?var=value')
+        expect(JSON.parse(response.text)).to.deep.include({
+          name: 'rolando',
+          age: 33
+        })
       })
   })
 

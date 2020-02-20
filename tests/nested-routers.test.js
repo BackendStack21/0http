@@ -15,6 +15,14 @@ describe('0http Web Framework - Nested Routers', () => {
       req.body = req.url
       next()
     })
+
+    router.use(async (req, res, next) => {
+      try {
+        await next()
+      } catch (err) {
+        return next(err)
+      }
+    })
     router.use('/r1', router1)
     router.use('/r1', (req, res, next) => {
       res.end(req.url + ':' + req.body)
@@ -26,6 +34,9 @@ describe('0http Web Framework - Nested Routers', () => {
     router2.get('/url/:age', (req, res, next) => {
       req.params.age = ~~req.params.age
       res.end(JSON.stringify(req.params))
+    })
+    router2.get('/throw', async (req, res, next) => {
+      throw new Error('nested error')
     })
     router.use('/r2/:name', router2)
 
@@ -61,6 +72,15 @@ describe('0http Web Framework - Nested Routers', () => {
           name: 'rolando',
           age: 33
         })
+      })
+  })
+
+  it('should handle nested router async handler error', async () => {
+    await request(baseUrl)
+      .get('/r2/rolando/throw')
+      .expect(500)
+      .then((response) => {
+        expect(response.text).to.equals('nested error')
       })
   })
 

@@ -3,6 +3,9 @@ Cero friction HTTP framework:
 - Tweaked Node.js Server for high throughput.
 - Use the request router you like. 
 
+![Performance Benchmarks](Benchmarks.png)
+> [You can read more about this numbers here.](https://github.com/the-benchmarker/web-frameworks/blob/e00f4b9fc3db7105d8c918c36691560be069697c/README.md)
+
 ## Usage
 ```js
 const cero = require('0http')

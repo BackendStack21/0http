@@ -35,7 +35,7 @@ router.lookup = (req, res) // -> should trigger router search and handlers execu
 ### 0http - sequential (default router)
 This a `0http` extended implementation of the [trouter](https://www.npmjs.com/package/trouter) router. Includes support for middlewares, nested routers and shortcuts for routes registration.  
 As this is an iterative regular expression matching router, it tends to be slower than `find-my-way` when the number of registered routes increases; to mitigate this issue, we use 
-an internal LRU cache to store the matching results of the previous requests, resulting on a super-fast matching process.
+an internal(optional) LRU cache to store the matching results of the previous requests, resulting on a super-fast matching process.
 
 Supported HTTP verbs: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
 
@@ -70,7 +70,7 @@ server.listen(3000)
     res.end()
   }
   ```
-- **cacheSize**: Router matching LRU cache size. Default value: `1000`
+- **cacheSize**: Router matching LRU cache size. A given value <= 0 will disable the cache. Default value: `1000`
 - **errorHandler**: Global error handler function. Default value: 
   ```js 
   (err, req, res) => {

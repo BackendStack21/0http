@@ -1,6 +1,8 @@
 /* global describe, it */
 const expect = require('chai').expect
 const request = require('supertest')
+const path = require('path')
+const { createReadStream } = require('fs')
 
 describe('0http Web Framework - Smoke', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
@@ -40,6 +42,13 @@ describe('0http Web Framework - Smoke', () => {
 
     router.get('/headers', (req, res) => {
       res.end(JSON.stringify(res.getHeaders()))
+    })
+
+    router.get('/pipe', (req, res) => {
+      res.setHeader('Content-Type', 'text/js')
+      const readStream = createReadStream(path.join(__dirname, 'smoke.test.js'))
+
+      readStream.pipe(res)
     })
 
     router.all('/sheet.css', (req, res) => res.end())
@@ -101,6 +110,16 @@ describe('0http Web Framework - Smoke', () => {
       .expect(200)
       .then((response) => {
         expect(response.text).to.equal(JSON.stringify({ 'x-header': '1' }))
+      })
+  })
+
+  it('should retrieve file using pipe', async () => {
+    await request(baseUrl)
+      .get('/pipe')
+      .expect(200)
+      .then((response) => {
+        expect(response.headers['content-type']).to.equal('text/js')
+        expect(response.text.indexOf('should retrieve file using pipe') > 0).to.equal(true)
       })
   })
 

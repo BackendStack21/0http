@@ -180,8 +180,8 @@ describe('0http Web Framework - Smoke', () => {
       .expect(200)
       .then((response) => {
         expect(response.text).to.equal(JSON.stringify({
-          id: [ '1', '2' ],
-          name: [ 'a', 'b' ],
+          id: ['1', '2'],
+          name: ['a', 'b'],
           tag: 'hello'
         }))
       })

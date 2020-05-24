@@ -29,8 +29,8 @@
   "homepage": "https://github.com/jkyberneees/0http#readme",
   "devDependencies": {
     "chai": "^4.2.0",
-    "find-my-way": "^2.2.3",
-    "mocha": "^6.2.3",
+    "find-my-way": "^3.0.1",
+    "mocha": "^7.2.0",
     "nyc": "^15.0.1",
     "standard": "^14.3.4",
     "supertest": "^4.0.2",

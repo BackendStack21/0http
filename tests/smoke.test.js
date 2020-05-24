@@ -51,6 +51,23 @@ describe('0http Web Framework - Smoke', () => {
       readStream.pipe(res)
     })
 
+    router.get('/remove-header', (req, res) => {
+      res.setHeader('X-Header-Upper', 'test')
+      res.removeHeader('x-header-upper')
+      res.end(JSON.stringify(res.getHeaders()))
+    })
+
+    router.get('/redirect', (req, res) => {
+      res.writeHead(301,
+        { Location: '/redirect2' }
+      )
+      res.end()
+    })
+
+    router.get('/querystring', (req, res) => {
+      res.end(JSON.stringify(req.query))
+    })
+
     router.all('/sheet.css', (req, res) => res.end())
 
     const nested = require('../lib/router/sequential')()
@@ -120,6 +137,53 @@ describe('0http Web Framework - Smoke', () => {
       .then((response) => {
         expect(response.headers['content-type']).to.equal('text/js')
         expect(response.text.indexOf('should retrieve file using pipe') > 0).to.equal(true)
+      })
+  })
+
+  it('should remove header', async () => {
+    await request(baseUrl)
+      .get('/remove-header')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal('{}')
+      })
+  })
+
+  it('should retrieve redirect', async () => {
+    await request(baseUrl)
+      .get('/redirect')
+      .expect(301)
+      .expect('Location', '/redirect2')
+  })
+
+  it('should not retrieve querystring', async () => {
+    await request(baseUrl)
+      .get('/querystring')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal('{}')
+      })
+  })
+
+  it('should retrieve querystring', async () => {
+    await request(baseUrl)
+      .get('/querystring?id=1')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal(JSON.stringify({ id: '1' }))
+      })
+  })
+
+  it('should retrieve querystring array', async () => {
+    await request(baseUrl)
+      .get('/querystring?id[]=1&id[]=2&name=a&name=b&tag=hello')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal(JSON.stringify({
+          id: [ '1', '2' ],
+          name: [ 'a', 'b' ],
+          tag: 'hello'
+        }))
       })
   })
 

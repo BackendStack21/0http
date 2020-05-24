@@ -1,4 +1,6 @@
 # 0http
+[![NPM version](https://img.shields.io/npm/v/0http.svg?style=flat)](https://www.npmjs.com/package/0http)  
+
 Cero friction HTTP framework:
 - Tweaked Node.js Server for high throughput.
 - Use the request router you like. 

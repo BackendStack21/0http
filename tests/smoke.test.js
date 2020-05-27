@@ -35,6 +35,10 @@ describe('0http Web Framework - Smoke', () => {
       res.end(req.body)
     })
 
+    router.get('/qs', (req, res) => {
+      res.end(JSON.stringify(req.query))
+    })
+
     router.use('/headers', (req, res, next) => {
       res.setHeader('x-header', '1')
       next()
@@ -127,6 +131,15 @@ describe('0http Web Framework - Smoke', () => {
       .expect(200)
       .then((response) => {
         expect(response.text).to.equal(JSON.stringify({ 'x-header': '1' }))
+      })
+  })
+
+  it('should parse querystring', async () => {
+    await request(baseUrl)
+      .get('/qs?name=0http&dep[]=a&dep[]=b')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal(JSON.stringify({ name: '0http', dep: ['a', 'b'] }))
       })
   })
 

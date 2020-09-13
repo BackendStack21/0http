@@ -3,16 +3,17 @@ const expect = require('chai').expect
 const request = require('supertest')
 const path = require('path')
 const { createReadStream } = require('fs')
+const bodyParser = require('body-parser')
 
 describe('0http Web Framework - Smoke', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
   const { router, server } = require('../index')({
-    server: require('../lib/server/low')(),
     router: require('../lib/router/sequential')()
   })
 
   it('should successfully register service routes', (done) => {
+    router.use(bodyParser.json())
     router.use((req, res, next) => next())
     router.use('/', (req, res, next) => next())
 
@@ -32,7 +33,7 @@ describe('0http Web Framework - Smoke', () => {
     })
 
     router.post('/echo', (req, res) => {
-      res.end(req.body)
+      res.end(JSON.stringify(req.body))
     })
 
     router.get('/qs', (req, res) => {
@@ -84,10 +85,8 @@ describe('0http Web Framework - Smoke', () => {
       res.end(`${req.stepUrl} - ${req.url}`)
     })
 
-    server.start(~~process.env.PORT, serverSocket => {
-      if (serverSocket) {
-        done()
-      }
+    server.listen(~~process.env.PORT, () => {
+      done()
     })
   })
 

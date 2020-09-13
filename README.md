@@ -156,39 +156,6 @@ const { router, server } = cero({
 If no server is provided by configuration, the standard Node.js [http.Server](https://nodejs.org/api/http.html#http_class_http_server) implementation is used.  
 Because this server offers the best balance between Node.js ecosystem compatibility and performance, we highly recommend it for most use cases.
 
-### Low Server
-`low` is a tiny Node.js friendly wrapper around the great [uWebSockets.js](https://github.com/uNetworking/uWebSockets.js) HTTP server. I/O throughput is 
-maximized at the cost of API compatibility.
-> As far as for Node.js, `uWebSockets.js` brings the best I/O performance in terms of HTTP support.
-
-#### Install dependencies
-```
-npm i uNetworking/uWebSockets.js#v15.11.0
-```
-#### Example usage
-```js
-const low = require('0http/lib/server/low')
-const cero = require('0http')
-
-const { router, server } = cero({
-  server: low()
-})
-
-router.get('/hi', (req, res) => {
-  res.end('Hello World!')
-})
-
-server.listen(3000, (socket) => {
-  if (socket) {
-    console.log('HTTP server ready!')
-  }
-})
-
-
-// ...
-server.close()
-```
-
 ## Benchmarks (30/12/2019)
 **Node version**: v12.14.0  
 **Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4  
@@ -199,10 +166,6 @@ wrk -t8 -c40 -d5s http://127.0.0.1:3000/hi
 ```
 
 ### 1 route registered
-- **0http (find-my-way + low)**  
-  `Requests/sec:  135436.99`
-- 0http (sequential + low)  
-  `Requests/sec:  134281.32`
 - 0http (sequential)   
   `Requests/sec:  88438.69`
 - 0http (find-my-way)   
@@ -227,3 +190,7 @@ You can support the maintenance of this project:
 - TRON Crypto Coin: `TJ5Bbf9v4kpptnRsePXYDvnYcYrS5Tyxus`
 - BITCOIN Crypto Coin: `bc1qcrr58venyh54ztvkqym39p9rhnxg4308t0802f`
 - Ethereum Crypto Coin: `0xD73c8E63a83eBD8Df3fB3d0090f1fe7a1eEB980B`
+
+## Breaking Changes:
+### 3.x
+- Low HTTP server implementation was moved to: https://github.com/jkyberneees/low-http-server

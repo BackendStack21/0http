@@ -152,6 +152,10 @@ const { router, server } = cero({
 })
 ```
 
+### Node.js http.Server 
+If no server is provided by configuration, the standard Node.js [http.Server](https://nodejs.org/api/http.html#http_class_http_server) implementation is used.  
+Because this server offers the best balance between Node.js ecosystem compatibility and performance, we highly recommend it for most use cases.
+
 ## Benchmarks (30/12/2019)
 **Node version**: v12.14.0  
 **Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4  

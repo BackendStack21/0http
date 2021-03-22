@@ -74,6 +74,7 @@ server.listen(3000)
   ```
 - **cacheSize**: Router matching LRU cache size. A given value <= 0 will disable the cache. Default value: `1000`
 - **errorHandler**: Global error handler function. Default value: 
+  
   ```js 
   (err, req, res) => {
     res.statusCode = 500
@@ -81,7 +82,10 @@ server.listen(3000)
   }
   ```
 
+* **prioRequestsProcessing**: `true` to use SetImmediate to prioritize router lookup, `false` to disable. By default `true`, if used with native Node.js `http` and `https` servers. Set to `false`, if using Node.js Native Addon server, such as uWebSockets.js, as this will cause a huge performance penalty
+
 Example passing configuration options:
+
 ```js
 const sequential = require('0http/lib/router/sequential')
 const { router, server } = cero({
@@ -180,6 +184,7 @@ wrk -t8 -c40 -d5s http://127.0.0.1:3000/hi
   `Requests/sec:  82682.86`
 
 > For more accurate benchmarks please see:
+>
 > - https://github.com/the-benchmarker/web-frameworks
 
 ## Support / Donate 💚

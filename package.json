@@ -43,6 +43,7 @@
   ],
   "dependencies": {
     "lru-cache": "^6.0.0",
+    "regexparam": "^1.0.0",
     "trouter": "^3.2.0"
   }
 }

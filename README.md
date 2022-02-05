@@ -1,5 +1,9 @@
 # 0http
-[![NPM version](https://img.shields.io/npm/v/0http.svg?style=flat)](https://www.npmjs.com/package/0http)  
+[![NPM version](https://badgen.net/npm/v/0http)](https://www.npmjs.com/package/0http)
+[![NPM Total Downloads](https://badgen.net/npm/dt/0http)](https://www.npmjs.com/package/0http)
+[![License](https://badgen.net/npm/license/0http)](https://www.npmjs.com/package/0http)
+[![TypeScript support](https://badgen.net/npm/types/0http)](https://www.npmjs.com/package/0http)
+[![Github stars](https://badgen.net/github/stars/jkyberneees/0http?icon=github)](https://github.com/jkyberneees/0http)
 
 Cero friction HTTP framework:
 - Tweaked Node.js Server for high throughput.

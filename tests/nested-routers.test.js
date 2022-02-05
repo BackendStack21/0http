@@ -15,6 +15,10 @@ describe('0http Web Framework - Nested Routers', () => {
       req.body = req.url
       next()
     })
+    router1.get('/', (req, res, next) => {
+      req.body = req.url
+      next()
+    })
 
     router.use(async (req, res, next) => {
       try {
@@ -60,6 +64,24 @@ describe('0http Web Framework - Nested Routers', () => {
       .expect(200)
       .then((response) => {
         expect(response.text).to.equal('/r1/url:/url')
+      })
+  })
+
+  it('should hit GET /url?format=json on nested router /r1', async () => {
+    await request(baseUrl)
+      .get('/r1/url?format=json')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal('/r1/url?format=json:/url?format=json')
+      })
+  })
+
+  it('should hit GET /?format=json on nested router /r1', async () => {
+    await request(baseUrl)
+      .get('/r1/?format=json')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).to.equal('/r1/?format=json:/?format=json')
       })
   })
 

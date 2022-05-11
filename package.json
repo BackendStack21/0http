@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npx standard",
     "format": "npx standard --fix",
-    "test": "PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js"
+    "test": "cross-env PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   "devDependencies": {
     "body-parser": "^1.19.1",
     "chai": "^4.3.6",
+    "cross-env": "^7.0.3",
     "find-my-way": "^5.2.0",
     "mocha": "^9.2.0",
     "nyc": "^15.1.0",

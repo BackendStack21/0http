@@ -12,7 +12,7 @@ Cero friction HTTP framework:
 ![Performance Benchmarks](Benchmarks.png)
 > Check it yourself: https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana
 
-## Usage
+# Usage
 ```js
 const cero = require('0http')
 const { router, server } = cero()

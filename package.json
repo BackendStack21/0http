@@ -43,7 +43,7 @@
     "lib/"
   ],
   "dependencies": {
-    "lru-cache": "^6.0.0",
+    "lru-cache": "^7.10.1",
     "regexparam": "^2.0.0",
     "trouter": "^3.2.0"
   }

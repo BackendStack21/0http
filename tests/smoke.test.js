@@ -135,10 +135,10 @@ describe('0http Web Framework - Smoke', () => {
 
   it('should parse querystring', async () => {
     await request(baseUrl)
-      .get('/qs?name=0http&dep[]=a&dep[]=b')
+      .get('/qs?name=0http&dep[]=a&dep[]=b&dep=c')
       .expect(200)
       .then((response) => {
-        expect(response.text).to.equal(JSON.stringify({ name: '0http', dep: ['a', 'b'] }))
+        expect(response.text).to.equal(JSON.stringify({ name: '0http', dep: ['a', 'b', 'c'] }))
       })
   })
 

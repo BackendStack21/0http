@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Setup Environment (Using NodeJS 10.x)
+      - name: Setup Environment (Using NodeJS 18.x)
         uses: actions/setup-node@v1
         with:
-          node-version: 10.x
+          node-version: 18.x
 
       - name: Install dependencies
         run: npm install

@@ -2,7 +2,7 @@
 const expect = require('chai').expect
 const request = require('supertest')
 
-describe('0http Web Framework - Nested Routers', () => {
+describe('0http - Nested Routers', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
   const { router, server } = require('../index')({

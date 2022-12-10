@@ -2,7 +2,7 @@
 const expect = require('chai').expect
 const request = require('supertest')
 
-describe('0http Web Framework - Middlewares Registration', () => {
+describe('0http - Middlewares Registration', () => {
   const baseUrl = 'http://localhost:' + process.env.PORT
 
   const { router, server } = require('../index')({

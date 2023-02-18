@@ -5,11 +5,14 @@
 [![TypeScript support](https://badgen.net/npm/types/0http)](https://www.npmjs.com/package/0http)
 [![Github stars](https://badgen.net/github/stars/jkyberneees/0http?icon=github)](https://github.com/jkyberneees/0http)
 
-Cero friction HTTP framework:
+<img src="docs/0http-logo.svg" width="200">  
+
+Zero friction HTTP framework:
 - Tweaked Node.js HTTP server for high throughput.
 - High-performance and customizable request routers. 
 
-![Performance Benchmarks](docs/Benchmarks.png)
+![Performance Benchmarks](docs/Benchmarks.png) 
+
 > Check it yourself: https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana
 
 ## Usage

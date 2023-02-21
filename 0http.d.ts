@@ -8,7 +8,7 @@ declare module "0http" {
       on: (
         method: import("trouter").Methods,
         pattern: import("trouter").Pattern,
-        handlers: VoidFunction[]
+        handlers: Array<(req: Request, res: Response) => void>
       ) => SequentialRouter;
     };
 

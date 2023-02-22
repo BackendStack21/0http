@@ -1,36 +1,30 @@
-declare module "0http" {
+import { type Server } from "http";
+import Trouter, { Methods, Pattern } from "trouter";
+
+declare namespace zeroHttp {
   interface IRouter {
     lookup: (req: Request, res: Response, step?: VoidFunction) => void;
   }
 
   type SequentialRouter = IRouter &
-    import("trouter").default & {
+    Trouter & {
       on: (
-        method: import("trouter").Methods,
-        pattern: import("trouter").Pattern,
+        method: Methods,
+        pattern: Pattern,
         handlers: Array<(req: Request, res: Response) => void>
       ) => SequentialRouter;
     };
 
-  interface IBuildServerAndRouterConfig<
-    R extends IRouter,
-    S extends import("http").Server
-  > {
+  interface IBuildServerAndRouterConfig<R extends IRouter, S extends Server> {
     router?: R;
     server?: S;
     prioRequestsProcessing?: boolean;
   }
-
-  type BuildServerAndRouter = <
-    R extends IRouter = SequentialRouter,
-    S extends import("http").Server = import("http").Server
-  >(
-    config?: IBuildServerAndRouterConfig<R, S>
-  ) => {
-    router: R;
-    server: S;
-  };
-
-  const buildServerAndRouter: BuildServerAndRouter;
-  export default buildServerAndRouter;
 }
+
+declare function buildServerAndRouter<
+  R extends zeroHttp.IRouter = zeroHttp.SequentialRouter,
+  S extends Server = Server
+>(config?: zeroHttp.IBuildServerAndRouterConfig<R, S>): any;
+
+export = buildServerAndRouter;

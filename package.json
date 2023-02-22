@@ -47,5 +47,5 @@
     "regexparam": "^2.0.1",
     "trouter": "^3.2.0"
   },
-  "types": "./0http.d.ts"
+  "types": "./index.d.ts"
 }

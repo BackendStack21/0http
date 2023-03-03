@@ -6,7 +6,8 @@ module.exports = (config = { prioRequestsProcessing: true }) => {
   const router = config.router || require('./lib/router/sequential')()
   const server = config.server || http.createServer()
 
-  server.prioRequestsProcessing = config.prioRequestsProcessing && (server instanceof httpServer || server instanceof httpsServer)
+  server.prioRequestsProcessing =
+    config.prioRequestsProcessing && (server instanceof httpServer || server instanceof httpsServer)
 
   if (server.prioRequestsProcessing) {
     server.on('request', (req, res) => {

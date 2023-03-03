@@ -12,11 +12,15 @@ router.use('/', (req, res, next) => {
   res.write('World')
   return next()
 })
-router.get('/hi', (req, res, next) => {
-  res.write('!')
-  return next()
-}, (req, res) => {
-  res.end()
-})
+router.get(
+  '/hi',
+  (req, res, next) => {
+    res.write('!')
+    return next()
+  },
+  (req, res) => {
+    res.end()
+  }
+)
 
 server.listen(3000)

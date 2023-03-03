@@ -44,18 +44,14 @@ describe('0http - Nested Routers', () => {
     })
     router.use('/r2/:name', router2)
 
-    server.listen(~~process.env.PORT, err => {
+    server.listen(~~process.env.PORT, (err) => {
       if (!err) done()
     })
   })
 
   it('should 404 if route handler does not exist', async () => {
-    await request(baseUrl)
-      .get('/r1/404')
-      .expect(404)
-    await request(baseUrl)
-      .get('/r2/404')
-      .expect(404)
+    await request(baseUrl).get('/r1/404').expect(404)
+    await request(baseUrl).get('/r2/404').expect(404)
   })
 
   it('should hit GET /url on nested router /r1', async () => {

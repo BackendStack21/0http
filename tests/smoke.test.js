@@ -19,18 +19,24 @@ describe('0http - Smoke', () => {
 
     router.get('/pets/:id', function (req, res) {
       res.setHeader('content-type', 'application/json')
-      res.end(JSON.stringify({
-        name: 'Happy Cat'
-      }))
+      res.end(
+        JSON.stringify({
+          name: 'Happy Cat'
+        })
+      )
     })
 
-    router.get('/middlewares/:name', (req, res, next) => {
-      req.params.name = req.params.name.toUpperCase()
-      next()
-    }, (req, res, next) => {
-      res.end(req.params.name)
-      next()
-    })
+    router.get(
+      '/middlewares/:name',
+      (req, res, next) => {
+        req.params.name = req.params.name.toUpperCase()
+        next()
+      },
+      (req, res, next) => {
+        res.end(req.params.name)
+        next()
+      }
+    )
 
     router.post('/echo', (req, res) => {
       res.end(JSON.stringify(req.body))
@@ -63,9 +69,7 @@ describe('0http - Smoke', () => {
     })
 
     router.get('/redirect', (req, res) => {
-      res.writeHead(301,
-        { Location: '/redirect2' }
-      )
+      res.writeHead(301, { Location: '/redirect2' })
       res.end()
     })
 
@@ -91,9 +95,7 @@ describe('0http - Smoke', () => {
   })
 
   it('should 404 if route handler does not exist', async () => {
-    await request(baseUrl)
-      .get('/404')
-      .expect(404)
+    await request(baseUrl).get('/404').expect(404)
   })
 
   it('should GET JSON response /pets/:id', async () => {
@@ -162,10 +164,7 @@ describe('0http - Smoke', () => {
   })
 
   it('should retrieve redirect', async () => {
-    await request(baseUrl)
-      .get('/redirect')
-      .expect(301)
-      .expect('Location', '/redirect2')
+    await request(baseUrl).get('/redirect').expect(301).expect('Location', '/redirect2')
   })
 
   it('should not retrieve querystring', async () => {
@@ -191,24 +190,20 @@ describe('0http - Smoke', () => {
       .get('/querystring?id[]=1&id[]=2&name=a&name=b&tag=hello')
       .expect(200)
       .then((response) => {
-        expect(response.text).to.equal(JSON.stringify({
-          id: ['1', '2'],
-          name: ['a', 'b'],
-          tag: 'hello'
-        }))
+        expect(response.text).to.equal(
+          JSON.stringify({
+            id: ['1', '2'],
+            name: ['a', 'b'],
+            tag: 'hello'
+          })
+        )
       })
   })
 
   it('should receive 200 on /sheet.css using .all registration', async () => {
-    await request(baseUrl)
-      .get('/sheet.css')
-      .expect(200)
-    await request(baseUrl)
-      .post('/sheet.css')
-      .expect(200)
-    await request(baseUrl)
-      .put('/sheet.css')
-      .expect(200)
+    await request(baseUrl).get('/sheet.css').expect(200)
+    await request(baseUrl).post('/sheet.css').expect(200)
+    await request(baseUrl).put('/sheet.css').expect(200)
   })
 
   it('should hit GET /nested/info on nested router', async () => {

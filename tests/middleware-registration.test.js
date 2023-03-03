@@ -41,7 +41,7 @@ describe('0http - Middlewares Registration', () => {
       res.end(JSON.stringify(res.body))
     })
 
-    server.listen(~~process.env.PORT, err => {
+    server.listen(~~process.env.PORT, (err) => {
       if (!err) done()
     })
   })

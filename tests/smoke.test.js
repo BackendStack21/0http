@@ -6,7 +6,7 @@ const { createReadStream } = require('fs')
 const bodyParser = require('body-parser')
 
 describe('0http - Smoke', () => {
-  const baseUrl = 'http://localhost:' + process.env.PORT
+  const baseUrl = `http://localhost:${process.env.PORT}`
 
   const { router, server } = require('../index')({
     router: require('../lib/router/sequential')()

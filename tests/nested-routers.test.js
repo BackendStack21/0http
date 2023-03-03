@@ -3,7 +3,7 @@ const expect = require('chai').expect
 const request = require('supertest')
 
 describe('0http - Nested Routers', () => {
-  const baseUrl = 'http://localhost:' + process.env.PORT
+  const baseUrl = `http://localhost:${process.env.PORT}`
 
   const { router, server } = require('../index')({
     router: require('../lib/router/sequential')()
@@ -29,7 +29,7 @@ describe('0http - Nested Routers', () => {
     })
     router.use('/r1', router1)
     router.use('/r1', (req, res, next) => {
-      res.end(req.url + ':' + req.body)
+      res.end(`${req.url}:${req.body}`)
 
       next()
     })

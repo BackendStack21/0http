@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 })
 
 router.get('/hi', (req, res) => {
-  res.end(`Hello World from TS!`)
+  res.end('Hello World from TS!')
 })
 
 server.listen(3000)

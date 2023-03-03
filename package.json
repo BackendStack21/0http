@@ -4,8 +4,8 @@
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
-    "lint": "npx standard",
-    "format": "npx standard --fix",
+    "lint": "npx rome ci . --semicolons=as-needed",
+    "format": "npx rome format . --semicolons=as-needed --write",
     "test": "cross-env PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js"
   },
   "repository": {

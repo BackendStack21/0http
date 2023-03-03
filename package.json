@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "v3.5.0",
+  "version": "v3.5.1",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -41,6 +41,8 @@
     "LICENSE",
     "README.md",
     "index.js",
+    "index.d.ts",
+    "common.d.ts",
     "lib/"
   ],
   "dependencies": {

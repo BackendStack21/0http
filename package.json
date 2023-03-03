@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "v3.4.4",
+  "version": "v3.5.0",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -44,9 +44,9 @@
     "lib/"
   ],
   "dependencies": {
-    "lru-cache": "^7.14.1",
+    "lru-cache": "^7.18.1",
     "regexparam": "^2.0.1",
-    "trouter": "^3.2.0"
+    "trouter": "^3.2.1"
   },
   "types": "./index.d.ts"
 }

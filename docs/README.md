@@ -15,9 +15,10 @@ Zero friction HTTP framework:
 > Check it yourself: https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana
 
 # Usage
+JavaScript:
 ```js
-const cero = require('0http')
-const { router, server } = cero()
+const zero = require('0http')
+const { router, server } = zero()
 
 router.get('/hello', (req, res) => {
   res.end('Hello World!')
@@ -30,6 +31,24 @@ router.post('/do', (req, res) => {
 })
 
 //...
+
+server.listen(3000)
+```
+
+TypeScript:
+```ts
+import zero from '0http'
+import { Protocol } from '0http/common'
+
+const { router, server } = zero<Protocol.HTTP>()
+
+router.use((req, res, next) => {
+  return next()
+})
+
+router.get('/hi', (req, res) => {
+  res.end(`Hello World from TS!`)
+})
 
 server.listen(3000)
 ```
@@ -48,8 +67,8 @@ an internal(optional) LRU cache to store the matching results of the previous re
 Supported HTTP verbs: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
 
 ```js
-const cero = require('0http')
-const { router, server } = cero({})
+const zero = require('0http')
+const { router, server } = zero({})
 
 // global middleware example
 router.use('/', (req, res, next) => {
@@ -94,7 +113,7 @@ Example passing configuration options:
 
 ```js
 const sequential = require('0http/lib/router/sequential')
-const { router, server } = cero({
+const { router, server } = zero({
   router: sequential({
     cacheSize: 2000
   })
@@ -121,8 +140,8 @@ router.get('/sayhi', (req, res) => {
 ### Nested Routers
 You can simply use `sequential` router intances as nested routers:
 ```js
-const cero = require('../index')
-const { router, server } = cero({})
+const zero = require('../index')
+const { router, server } = zero({})
 
 const nested = require('0http/lib/router/sequential')()
 nested.get('/url', (req, res, next) => {
@@ -139,8 +158,8 @@ server.listen(3000)
 Super-fast raw HTTP router with no goodies. Internally uses a [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) 
 router that will bring better performance over iterative regular expressions matching. 
 ```js
-const cero = require('../index')
-const { router, server } = cero({
+const zero = require('../index')
+const { router, server } = zero({
   router: require('find-my-way')()
 })
 
@@ -154,9 +173,9 @@ server.listen(3000)
 # Servers
 `0http` is just a wrapper for the servers and routers implementations you provide. 
 ```js
-const cero = require('0http')
+const zero = require('0http')
 
-const { router, server } = cero({
+const { router, server } = zero({
   server: yourCustomServerInstance
 })
 ```

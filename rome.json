@@ -1,23 +1,19 @@
 {
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentSize": 2,
+    "lineWidth": 120,
+    "ignore": ["dist"]
+  },
+  "javascript": {
     "formatter": {
-        "enabled": true,
-        "indentStyle": "space",
-        "indentSize": 2,
-        "lineWidth": 120,
-        "ignore": [
-            "dist"
-        ]
-    },
-    "javascript": {
-        "formatter": {
-            "quoteStyle": "single",
-            "trailingComma": "none"
-        }
-    },
-    "linter": {
-        "enabled": true,
-        "ignore": [
-            "dist"
-        ]
+      "quoteStyle": "single",
+      "trailingComma": "none"
     }
+  },
+  "linter": {
+    "enabled": true,
+    "ignore": ["dist"]
+  }
 }

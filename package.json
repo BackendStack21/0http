@@ -27,12 +27,14 @@
   },
   "homepage": "https://github.com/BackendStack21/0http#readme",
   "devDependencies": {
+    "0http": "^3.5.2",
     "@types/node": "^18.14.4",
     "body-parser": "^1.20.1",
     "chai": "^4.3.7",
     "cross-env": "^7.0.3",
     "find-my-way": "^5.2.0",
-    "mocha": "^10.2.0",
+    "mitata": "^0.1.11",
+    "mocha": "^10.4.0",
     "nyc": "^15.1.0",
     "supertest": "^6.3.3"
   },
@@ -45,8 +47,8 @@
     "lib/"
   ],
   "dependencies": {
-    "lru-cache": "^7.18.1",
-    "regexparam": "^2.0.1",
+    "lru-cache": "^10.2.0",
+    "regexparam": "^3.0.0",
     "trouter": "^3.2.1"
   },
   "types": "./index.d.ts"

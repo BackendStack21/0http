@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "3.5.3",
+  "version": "4.0.0",
   "description": "Cero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -28,15 +28,14 @@
   "homepage": "https://github.com/BackendStack21/0http#readme",
   "devDependencies": {
     "0http": "^3.5.2",
-    "@types/node": "^18.14.4",
+    "@types/node": "^22.10.5",
     "body-parser": "^1.20.1",
     "chai": "^4.3.7",
     "cross-env": "^7.0.3",
-    "find-my-way": "^5.2.0",
     "mitata": "^0.1.11",
-    "mocha": "^10.4.0",
-    "nyc": "^15.1.0",
-    "supertest": "^6.3.3"
+    "mocha": "^11.0.1",
+    "nyc": "^17.1.0",
+    "supertest": "^7.0.0"
   },
   "files": [
     "LICENSE",

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "format": "npx standard --fix",
-    "test": "cross-env PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js"
+    "test": "cross-env PORT=3000 NODE_ENV=testing npx nyc --check-coverage --lines 85 node ./node_modules/mocha/bin/mocha tests/*.test.js",
+    "bench": "node --expose-gc bench.js"
   },
   "repository": {
     "type": "git",
@@ -27,12 +28,12 @@
   },
   "homepage": "https://github.com/BackendStack21/0http#readme",
   "devDependencies": {
-    "0http": "^3.5.2",
+    "0http": "^4.0.0",
     "@types/node": "^22.10.5",
     "body-parser": "^1.20.1",
     "chai": "^4.3.7",
     "cross-env": "^7.0.3",
-    "mitata": "^0.1.11",
+    "mitata": "^1.0.30",
     "mocha": "^11.0.1",
     "nyc": "^17.1.0",
     "supertest": "^7.0.0"

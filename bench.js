@@ -44,60 +44,44 @@ const { router: routerPrevious } = httpPrevious({
   cacheSize: 0
 })
 setupRouter(routerPrevious)
-
-import('mitata/src/cli.mjs').then(({ run, bench, group, baseline }) => {
-  group('Next Router', () => {
-    baseline('Base URL', () => {
-      const req = getReqObject('/')
-      const res = getResObject()
-
-      router.lookup(req, res)
-    })
-    bench('Parameter URL', () => {
+import('mitata').then(({ run, bench, group }) => {
+  group('Routers', () => {
+    bench('Next Router Parameter URL', () => {
       const req = getReqObject('/0')
       const res = getResObject()
 
       router.lookup(req, res)
-    })
-    bench('Not Found URL', () => {
-      const req = getReqObject('/0/404')
-      const res = getResObject()
-
-      router.lookup(req, res)
-    })
-    bench('Error URL', () => {
-      const req = getReqObject('/0/error')
-      const res = getResObject()
-
-      router.lookup(req, res)
-    })
-  })
-
-  group('Previous Router', () => {
-    baseline('Base URL', () => {
-      const req = getReqObject('/')
-      const res = getResObject()
-
-      routerPrevious.lookup(req, res)
-    })
-    bench('Parameter URL', () => {
+    }).gc('inner')
+    bench('Previous Router Parameter URL', () => {
       const req = getReqObject('/0')
       const res = getResObject()
 
       routerPrevious.lookup(req, res)
-    })
-    bench('Not Found URL', () => {
+    }).gc('inner')
+    bench('Next Router Not Found URL', () => {
+      const req = getReqObject('/0/404')
+      const res = getResObject()
+
+      router.lookup(req, res)
+    }).gc('inner')
+    bench('Previous Router Not Found URL', () => {
       const req = getReqObject('/0/404')
       const res = getResObject()
 
       routerPrevious.lookup(req, res)
-    })
-    bench('Error URL', () => {
+    }).gc('inner')
+    bench('Next Router Error URL', () => {
+      const req = getReqObject('/0/error')
+      const res = getResObject()
+
+      router.lookup(req, res)
+    }).gc('inner')
+    bench('Previous Router Error URL', () => {
       const req = getReqObject('/0/error')
       const res = getResObject()
 
       routerPrevious.lookup(req, res)
-    })
+    }).gc('inner')
   })
 
   run({

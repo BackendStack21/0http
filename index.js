@@ -3,7 +3,7 @@ const httpServer = http.Server
 const httpsServer = require('https').Server
 
 module.exports = (config = { prioRequestsProcessing: true }) => {
-  const router = config.router || require('./lib/router/sequential')()
+  const router = config.router || require('./lib/router/sequential')(config)
   const server = config.server || http.createServer()
 
   server.prioRequestsProcessing =

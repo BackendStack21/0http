@@ -97,7 +97,7 @@ server.listen(3000)
     res.end()
   }
   ```
-- **cacheSize**: Router matching LRU cache size. A given value <= 0 will disable the cache. Default value: `1000`
+- **cacheSize**: The size of the LRU cache for router matching. If the value is `0`, the cache will be disabled. If the value is `<0`, the cache will have an unlimited size. If the value is `>0`, an LRU Cache will be used. Default value: `-1`, for extreme performance.
 - **errorHandler**: Global error handler function. Default value: 
   
   ```js 

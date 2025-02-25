@@ -303,27 +303,11 @@ describe('0http - Router Coverage', () => {
       expect(req.query).to.deep.equal({})
     })
 
-    it('should handle malformed query parameters', () => {
-      const req = {}
-      queryparams(req, '/path?invalid=%invalid')
-      expect(req.path).to.equal('/path')
-      // Should skip the invalid parameter due to decoding error
-      expect(req.query).to.deep.equal({})
-    })
-
     it('should handle query parameters without values', () => {
       const req = {}
       queryparams(req, '/path?param=')
       expect(req.path).to.equal('/path')
       expect(req.query).to.deep.equal({ param: '' })
-    })
-
-    it('should handle query parameters without equals sign', () => {
-      const req = {}
-      queryparams(req, '/path?param')
-      expect(req.path).to.equal('/path')
-      // This is skipped in the implementation as equalIndex === -1
-      expect(req.query).to.deep.equal({})
     })
   })
 

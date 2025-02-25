@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Zero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "rest"
   ],
   "engines": {
-    "node": ">=10.x"
+    "node": ">=20.x"
   },
   "author": "Rolando Santamaria Maso <kyberneees@gmail.com>",
   "license": "MIT",

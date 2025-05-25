@@ -51,20 +51,20 @@ function createMockRes () {
 
 const router = sequential()
 
+// Mock a simple route handler
+router.get('/test', (req, res) => {
+  console.log('Query keys:', Object.keys(req.query))
+  console.log('Query values:', req.query)
+  console.log('Prototype:', Object.getPrototypeOf(req.query))
+  res.end()
+})
+
 // Test each case
 testCases.forEach((testUrl, index) => {
   console.log(`\n--- Test ${index + 1}: ${testUrl} ---`)
 
   const req = createMockReq(testUrl)
   const res = createMockRes()
-
-  // Mock a simple route handler
-  router.get('/test', (req, res) => {
-    console.log('Query keys:', Object.keys(req.query))
-    console.log('Query values:', req.query)
-    console.log('Prototype:', Object.getPrototypeOf(req.query))
-    res.end()
-  })
 
   try {
     router.lookup(req, res)

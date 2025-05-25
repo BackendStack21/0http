@@ -28,12 +28,12 @@
   },
   "homepage": "https://github.com/BackendStack21/0http#readme",
   "devDependencies": {
-    "0http": "^4.1.0",
+    "0http": "^4.2.0",
     "@types/node": "^22.10.5",
     "body-parser": "^1.20.1",
     "chai": "^4.3.7",
     "cross-env": "^7.0.3",
-    "mitata": "^1.0.30",
+    "mitata": "^1.0.34",
     "mocha": "^11.0.1",
     "nyc": "^17.1.0",
     "supertest": "^7.0.0"

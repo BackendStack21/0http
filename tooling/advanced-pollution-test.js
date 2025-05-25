@@ -88,8 +88,8 @@ try {
 }
 
 // Final verification
-const hasPolluton = Object.prototype.polluted || Object.prototype.testProp
-if (hasPolluton) {
+const hasPollution = Object.prototype.polluted || Object.prototype.testProp
+if (hasPollution) {
   console.log('\n❌ VULNERABILITY: Prototype pollution detected!')
   process.exit(1)
 } else {

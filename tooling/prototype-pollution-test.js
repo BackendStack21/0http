@@ -18,7 +18,7 @@ router.get('/test', (req, res) => {
   console.log('Has __proto__ property:', '__proto__' in req.query)
   console.log('Has constructor property:', 'constructor' in req.query)
   console.log('Query object prototype:', Object.getPrototypeOf(req.query))
-  
+
   res.writeHead(200, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify({
     query: req.query,
@@ -41,15 +41,15 @@ const testCases = [
 console.log('Before tests - Object.prototype.polluted:', Object.prototype.polluted)
 
 // Mock request/response objects for testing
-function createMockReq(url) {
+function createMockReq (url) {
   return {
     method: 'GET',
-    url: url,
+    url,
     headers: {}
   }
 }
 
-function createMockRes() {
+function createMockRes () {
   let data = ''
   return {
     statusCode: 200,
@@ -63,10 +63,10 @@ function createMockRes() {
 // Test each case
 testCases.forEach((testUrl, index) => {
   console.log(`\n--- Test ${index + 1}: ${testUrl} ---`)
-  
+
   const req = createMockReq(testUrl)
   const res = createMockRes()
-  
+
   try {
     router.lookup(req, res)
     const responseData = JSON.parse(res._getData())

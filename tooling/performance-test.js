@@ -42,15 +42,15 @@ const scenarios = [
 ]
 
 // Mock request/response objects
-function createMockReq(url) {
+function createMockReq (url) {
   return {
     method: 'GET',
-    url: url,
+    url,
     headers: {}
   }
 }
 
-function createMockRes() {
+function createMockRes () {
   return {
     statusCode: 200,
     writeHead: () => {},
@@ -63,35 +63,35 @@ function createMockRes() {
 for (const config of testConfigs) {
   console.log(`📊 Testing: ${config.name}`)
   console.log('─'.repeat(50))
-  
+
   for (const scenario of scenarios) {
     const router = sequential({ cacheSize: config.cacheSize })
     scenario.setup(router)
-    
+
     // Warm up
     for (let i = 0; i < 1000; i++) {
       const req = createMockReq(scenario.url)
       const res = createMockRes()
       router.lookup(req, res)
     }
-    
+
     // Benchmark
     const iterations = 50000
     const start = process.hrtime.bigint()
-    
+
     for (let i = 0; i < iterations; i++) {
       const req = createMockReq(scenario.url)
       const res = createMockRes()
       router.lookup(req, res)
     }
-    
+
     const end = process.hrtime.bigint()
     const totalTime = Number(end - start)
     const avgTime = totalTime / iterations
-    
+
     console.log(`  ${scenario.name.padEnd(25)} ${(avgTime / 1000).toFixed(2).padStart(8)} µs/op`)
   }
-  
+
   console.log()
 }
 
@@ -105,22 +105,22 @@ const queryTests = [
   '/path?simple=value',
   '/path?a=1&b=2&c=3&d=4&e=5',
   '/path?arr=1&arr=2&arr=3&arr=4',
-  '/path?complex=val&simple=test&arr=1&arr=2&encoded=%20%21',
+  '/path?complex=val&simple=test&arr=1&arr=2&encoded=%20%21'
 ]
 
 for (const url of queryTests) {
   const iterations = 100000
   const start = process.hrtime.bigint()
-  
+
   for (let i = 0; i < iterations; i++) {
     const req = {}
     queryparams(req, url)
   }
-  
+
   const end = process.hrtime.bigint()
   const totalTime = Number(end - start)
   const avgTime = totalTime / iterations
-  
+
   const queryDesc = url.includes('?') ? `${url.split('?')[1].split('&').length} params` : 'no query'
   console.log(`  ${queryDesc.padEnd(15)} ${(avgTime / 1000).toFixed(2).padStart(8)} µs/op`)
 }
@@ -143,7 +143,7 @@ for (let i = 0; i < 10000; i++) {
     `/users/${i}?query=test`,
     `/nonexistent/${i}`
   ]
-  
+
   for (const url of urls) {
     const req = createMockReq(url)
     const res = createMockRes()

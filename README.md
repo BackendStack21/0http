@@ -11,9 +11,17 @@ Zero friction HTTP framework:
 - Tweaked Node.js HTTP server for high throughput.
 - High-performance and customizable request routers. 
 
-![Performance Benchmarks](docs/Benchmarks.png) 
+![Performance Benchmarks](docs/Benchmarks.png)
 
 > Check it yourself: https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana
+
+## Installation
+
+Install the package from npm:
+
+```bash
+npm install 0http
+```
 
 ## Usage
 ```js

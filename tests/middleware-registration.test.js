@@ -59,6 +59,25 @@ describe('0http - Middlewares Registration', () => {
       })
   })
 
+  it('should support array-based middleware registration', async () => {
+    router.use('/arr', [m2, m3])
+
+    router.get('/arr/hello', (req, res, next) => {
+      res.end(JSON.stringify(res.body))
+    })
+
+    await request(baseUrl)
+      .get('/arr/hello')
+      .expect(200)
+      .then((response) => {
+        const payload = JSON.parse(response.text)
+
+        expect(payload[0]).to.equal('m1')
+        expect(payload[1]).to.equal('m2')
+        expect(payload[2]).to.equal('m3')
+      })
+  })
+
   it('should successfully terminate the service', async () => {
     server.close()
   })

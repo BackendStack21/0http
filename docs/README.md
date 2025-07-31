@@ -138,7 +138,7 @@ router.get('/sayhi', (req, res) => {
 ```
 
 ### Nested Routers
-You can simply use `sequential` router intances as nested routers:
+You can simply use `sequential` router instances as nested routers:
 ```js
 const zero = require('../index')
 const { router, server } = zero({})

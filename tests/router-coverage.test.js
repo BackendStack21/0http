@@ -366,6 +366,21 @@ describe('0http - Router Coverage', () => {
       expect(res.error).to.equal('Middleware exception')
     })
 
+    it('should handle async middleware rejections', async () => {
+      const req = {}
+      const res = {}
+      const middleware = async (req, res, next) => {
+        throw new Error('Async failure')
+      }
+      const defaultRoute = () => {}
+      const errorHandler = (err, req, res) => {
+        res.error = err.message
+      }
+
+      await next([middleware], req, res, 0, {}, defaultRoute, errorHandler)
+      expect(res.error).to.equal('Async failure')
+    })
+
     it('should handle nested router without pattern', () => {
       const req = { url: '/test', path: '/test' }
       const res = {}

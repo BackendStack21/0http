@@ -19,7 +19,7 @@
     "rest"
   ],
   "engines": {
-    "node": ">=20.x"
+    "node": ">=22.x"
   },
   "author": "Rolando Santamaria Maso <kyberneees@gmail.com>",
   "license": "MIT",

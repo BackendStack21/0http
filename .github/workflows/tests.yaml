@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Setup Environment (Using NodeJS 18.x)
+      - name: Setup Environment (Using NodeJS 22.x)
         uses: actions/setup-node@v1
         with:
           node-version: 22.x

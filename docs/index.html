@@ -1,57 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <title>0http · Zero friction HTTP framework for Node.js</title>
+    <meta
+      name="description"
+      content="0http is a zero friction HTTP framework for Node.js combining ultra-fast routing, composable middleware, and a minimal API surface."
+    />
+    <meta
+      name="keywords"
+      content="0http,http,node.js,node,framework,router,find-my-way,web server,api,rest,performance,fast,lightweight"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="0http &amp; contributors" />
 
-<head>
-  <meta charset="UTF-8">
-  <title>0http</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Zero friction HTTP framework, the need for speed.">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  <link href="https://fonts.googleapis.com/css?family=Outfit" rel="stylesheet">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="0http · Zero friction HTTP framework for Node.js" />
+    <meta
+      property="og:description"
+      content="Ultra-fast, zero-friction HTTP framework for Node.js with powerful routing, middleware composition, and great DX."
+    />
+    <meta property="og:url" content="https://0http.21no.de/" />
+    <meta property="og:site_name" content="0http" />
+    <meta property="og:image" content="https://0http.21no.de/0http-logo.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-  <style>
-    body {
-      border-right-color: #8d8d8d;
-      font-family: 'Outfit', sans-serif;
-    }
-  </style>
-</head>
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="0http · Zero friction HTTP framework for Node.js" />
+    <meta
+      name="twitter:description"
+      content="Ultra-fast, zero-friction HTTP framework for Node.js with powerful routing, middleware composition, and great DX."
+    />
+    <meta name="twitter:image" content="https://0http.21no.de/0http-logo.svg" />
+    <meta name="twitter:site" content="@0http" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code&display=swap"
+      rel="stylesheet"
+    />
 
-<body>
-  <div id="app"></div>
-  <script>
-    window.$docsify = {
-      name: '0http',
-      repo: 'https://github.com/BackendStack21/0http',
-      share: {
-        reddit: false,
-        linkedin: true,
-        facebook: true,
-        twitter: true,
-        whatsapp: true,
-        telegram: true,
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6J7SYCVPE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
       }
+      gtag("js", new Date());
+      gtag("config", "G-T6J7SYCVPE");
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="#" class="logo"> <span class="logo-zero">0</span>http </a>
+          <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#benchmarks">Benchmarks</a>
+            <a href="https://github.com/jkyberneees/0http" target="_blank">GitHub</a>
+            <a href="https://www.npmjs.com/package/0http" target="_blank">NPM</a>
+            <a href="#quick-start" class="btn btn-primary">Get Started</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-logo">0</div>
+          <h1>Zero friction HTTP framework<br /><span class="glow">for Node.js</span></h1>
+          <p>Tweaked for high throughput, low overhead, and maximum flexibility.</p>
+
+          <div class="hero-actions">
+            <a href="#quick-start" class="btn btn-primary">Get Started</a>
+            <a href="https://github.com/jkyberneees/0http" target="_blank" class="btn btn-secondary">View on GitHub</a>
+          </div>
+
+          <div class="hero-badges">
+            <a href="https://github.com/jkyberneees/0http" target="_blank" class="badge-link">
+              <img
+                src="https://img.shields.io/github/stars/jkyberneees/0http?style=for-the-badge&logo=github&label=Stars"
+                alt="GitHub stars"
+              />
+            </a>
+            <a href="https://www.npmjs.com/package/0http" target="_blank" class="badge-link">
+              <img
+                src="https://img.shields.io/npm/v/0http?style=for-the-badge&logo=npm&label=version"
+                alt="NPM version"
+              />
+            </a>
+            <a href="https://www.npmjs.com/package/0http" target="_blank" class="badge-link">
+              <img
+                src="https://img.shields.io/npm/dt/0http?style=for-the-badge&logo=npm&label=downloads"
+                alt="NPM downloads"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="container">
+          <h2 class="section-title">Why 0http?</h2>
+          <div class="features-grid">
+            <div class="feature-card">
+              <span class="feature-icon">🚀</span>
+              <h3>Blazing Fast</h3>
+              <p>
+                One of the fastest Node.js web frameworks. Optimized for speed with smart caching and efficient routing.
+              </p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">⚙️</span>
+              <h3>Highly Configurable</h3>
+              <p>Swap routers, servers, and customize behavior to fit your needs. You are in control.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🔌</span>
+              <h3>Middleware Support</h3>
+              <p>Express-like middleware chain with full <code>async/await</code> support for modern development.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">ʦ</span>
+              <h3>TypeScript Ready</h3>
+              <p>First-class TypeScript support for type-safe development out of the box.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🧩</span>
+              <h3>Nested Routing</h3>
+              <p>Powerful nested router support for modular architectures, optimized for static paths.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🛡️</span>
+              <h3>Production Ready</h3>
+              <p>Secure defaults with environment-aware error handling. Built for the real world.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="capabilities" class="capabilities">
+        <div class="container">
+          <h2 class="section-title">Core Capabilities</h2>
+
+          <div class="capability-item">
+            <h3>1. Pluggable Routers</h3>
+            <p>0http allows you to define the router implementation you prefer.</p>
+
+            <h4>Sequential Router (Default)</h4>
+            <p>
+              An extended implementation of <a href="https://www.npmjs.com/package/trouter" target="_blank">trouter</a>.
+            </p>
+            <ul>
+              <li><strong>Features</strong>: Middleware support, nested routers, regex matching.</li>
+              <li>
+                <strong>Performance</strong>: Uses an internal LRU cache (optional) to store matching results, making it
+                extremely fast even with many routes.
+              </li>
+              <li><strong>Supported Verbs</strong>: GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT</li>
+            </ul>
+
+            <h4>Find-My-Way Router</h4>
+            <p>
+              Integration with <a href="https://github.com/delvedor/find-my-way" target="_blank">find-my-way</a>, a
+              super-fast Radix Tree router.
+            </p>
+            <ul>
+              <li><strong>Best for</strong>: Static paths and high performance without regex overhead.</li>
+              <li><strong>Note</strong>: Does not support all the middleware goodies of the sequential router.</li>
+            </ul>
+          </div>
+
+          <div class="capability-item">
+            <h3>2. Middleware Engine</h3>
+            <p>The middleware engine is optimized for performance and flexibility.</p>
+            <ul>
+              <li><strong>Global & Route Middleware</strong>: Define middleware globally or for specific routes.</li>
+              <li><strong>Async/Await Support</strong>: Fully supports async middlewares for clean code.</li>
+            </ul>
+          </div>
+
+          <div class="capability-item">
+            <h3>3. Nested Routers</h3>
+            <p>
+              Organize your application with modular nested routers. 0http optimizes static nested routes for better
+              performance.
+            </p>
+          </div>
+
+          <div class="capability-item">
+            <h3>4. Custom Servers</h3>
+            <p>
+              0http is server-agnostic. You can use the standard Node.js <code>http.Server</code>,
+              <code>https.Server</code>, or even custom implementations.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="configuration" class="configuration">
+        <div class="container">
+          <h2 class="section-title">Configuration Options</h2>
+          <p class="section-subtitle">Pass a configuration object to <code>zero(config)</code>:</p>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>router</code></td>
+                  <td>Custom router instance.</td>
+                  <td><code>sequential()</code></td>
+                </tr>
+                <tr>
+                  <td><code>server</code></td>
+                  <td>Custom server instance.</td>
+                  <td><code>http.createServer()</code></td>
+                </tr>
+                <tr>
+                  <td><code>defaultRoute</code></td>
+                  <td>Handler for 404 Not Found.</td>
+                  <td><code>(req, res) => { res.statusCode = 404; res.end() }</code></td>
+                </tr>
+                <tr>
+                  <td><code>errorHandler</code></td>
+                  <td>Global error handler.</td>
+                  <td>Production-safe error handler.</td>
+                </tr>
+                <tr>
+                  <td><code>prioRequestsProcessing</code></td>
+                  <td>Use <code>setImmediate</code> to prioritize request processing.</td>
+                  <td><code>true</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 style="margin-top: 2rem; color: var(--heading-color)">Sequential Router Options</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>Description</th>
+                  <th>Default</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>cacheSize</code></td>
+                  <td>LRU cache size. <code>0</code> to disable, <code>&lt;0</code> for unlimited.</td>
+                  <td><code>-1</code> (Unlimited)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="installation">
+        <div class="container">
+          <h2 class="section-title">Installation</h2>
+          <div class="install-cmd" onclick="copyToClipboard('npm install 0http', this)">
+            <span style="color: var(--accent-color)">$</span> npm install 0http
+          </div>
+        </div>
+      </section>
+
+      <section id="quick-start" class="code-section">
+        <div class="container">
+          <h2 class="section-title">Quick Start</h2>
+          <p class="section-subtitle">Get started with 0http in seconds. Choose your use case below.</p>
+
+          <div class="examples-grid">
+            <!-- Example 1: Basic Server -->
+            <div class="example-card">
+              <h3 class="example-title">Basic Server</h3>
+              <div class="code-snippet">
+                <pre><code><span class="token keyword">const</span> zero <span class="token keyword">=</span> <span class="token function">require</span>(<span class="token string">'0http'</span>)
+<span class="token keyword">const</span> { router, server } <span class="token keyword">=</span> <span class="token function">zero</span>()
+
+router.<span class="token function">get</span>(<span class="token string">'/hello'</span>, (req, res) <span class="token keyword">=></span> {
+  res.<span class="token function">end</span>(<span class="token string">'Hello World!'</span>)
+})
+
+server.<span class="token function">listen</span>(<span class="token number">3000</span>)</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 2: JSON API -->
+            <div class="example-card">
+              <h3 class="example-title">JSON API</h3>
+              <div class="code-snippet">
+                <pre><code>router.<span class="token function">get</span>(<span class="token string">'/api/users'</span>, (req, res) <span class="token keyword">=></span> {
+  res.<span class="token function">setHeader</span>(<span class="token string">'Content-Type'</span>, <span class="token string">'application/json'</span>)
+  res.<span class="token function">end</span>(<span class="token function">JSON.stringify</span>({
+    users: [
+      { id: <span class="token number">1</span>, name: <span class="token string">'Alice'</span> },
+      { id: <span class="token number">2</span>, name: <span class="token string">'Bob'</span> }
+    ]
+  }))
+})</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 3: Middleware -->
+            <div class="example-card">
+              <h3 class="example-title">Middleware Chain</h3>
+              <div class="code-snippet">
+                <pre><code><span class="token comment">// Global middleware</span>
+router.<span class="token function">use</span>((req, res, next) <span class="token keyword">=></span> {
+  console.<span class="token function">log</span>(<span class="token string">`</span><span class="token interpolation">${req.method}</span> <span class="token interpolation">${req.url}</span><span class="token string">`</span>)
+  <span class="token keyword">return</span> <span class="token function">next</span>()
+})
+
+<span class="token comment">// Route middleware</span>
+router.<span class="token function">get</span>(<span class="token string">'/protected'</span>, auth, handler)</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 4: Async/Await -->
+            <div class="example-card">
+              <h3 class="example-title">Async/Await Support</h3>
+              <div class="code-snippet">
+                <pre><code>router.<span class="token function">get</span>(<span class="token string">'/users/:id'</span>, <span class="token keyword">async</span> (req, res) <span class="token keyword">=></span> {
+  <span class="token keyword">try</span> {
+    <span class="token keyword">const</span> user <span class="token keyword">=</span> <span class="token keyword">await</span> db.<span class="token function">findUser</span>(req.params.id)
+    res.<span class="token function">setHeader</span>(<span class="token string">'Content-Type'</span>, <span class="token string">'application/json'</span>)
+    res.<span class="token function">end</span>(<span class="token function">JSON.stringify</span>(user))
+  } <span class="token keyword">catch</span> (err) {
+    res.statusCode <span class="token keyword">=</span> <span class="token number">404</span>
+    res.<span class="token function">end</span>(<span class="token string">'User not found'</span>)
+  }
+})</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 5: Nested Routers -->
+            <div class="example-card">
+              <h3 class="example-title">Nested Routers</h3>
+              <div class="code-snippet">
+                <pre><code><span class="token keyword">const</span> apiRouter <span class="token keyword">=</span> <span class="token function">zero</span>().router
+
+apiRouter.<span class="token function">get</span>(<span class="token string">'/users'</span>, getUsers)
+apiRouter.<span class="token function">post</span>(<span class="token string">'/users'</span>, createUser)
+
+<span class="token comment">// Mount nested router</span>
+router.<span class="token function">use</span>(<span class="token string">'/api'</span>, apiRouter)
+
+<span class="token comment">// Routes: /api/users</span></code></pre>
+              </div>
+            </div>
+
+            <!-- Example 6: Error Handling -->
+            <div class="example-card">
+              <h3 class="example-title">Error Handling</h3>
+              <div class="code-snippet">
+                <pre><code><span class="token keyword">const</span> { router, server } <span class="token keyword">=</span> <span class="token function">zero</span>({
+  errorHandler: (err, req, res) <span class="token keyword">=></span> {
+    console.<span class="token function">error</span>(err)
+    res.statusCode <span class="token keyword">=</span> <span class="token number">500</span>
+    res.<span class="token function">end</span>(<span class="token string">'Internal Server Error'</span>)
+  }
+})
+
+router.<span class="token function">get</span>(<span class="token string">'/error'</span>, () <span class="token keyword">=></span> {
+  <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token function">Error</span>(<span class="token string">'Oops!'</span>)
+})</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 7: Query Parameters -->
+            <div class="example-card">
+              <h3 class="example-title">Query Parameters</h3>
+              <div class="code-snippet">
+                <pre><code>router.<span class="token function">get</span>(<span class="token string">'/search'</span>, (req, res) <span class="token keyword">=></span> {
+  <span class="token comment">// Query params available in req.query</span>
+  <span class="token keyword">const</span> { q, page, limit } <span class="token keyword">=</span> req.query
+  
+  res.<span class="token function">setHeader</span>(<span class="token string">'Content-Type'</span>, <span class="token string">'application/json'</span>)
+  res.<span class="token function">end</span>(<span class="token function">JSON.stringify</span>({ 
+    term: q, 
+    page: page || <span class="token number">1</span>,
+    limit: limit || <span class="token number">10</span>
+  }))
+})
+
+<span class="token comment">// GET /search?q=node&page=2&limit=20</span></code></pre>
+              </div>
+            </div>
+
+            <!-- Example 8: Custom Router -->
+            <div class="example-card">
+              <h3 class="example-title">Custom Router</h3>
+              <div class="code-snippet">
+                <pre><code><span class="token keyword">const</span> fmw <span class="token keyword">=</span> <span class="token function">require</span>(<span class="token string">'find-my-way'</span>)()
+
+<span class="token keyword">const</span> { server } <span class="token keyword">=</span> <span class="token function">zero</span>({
+  router: (req, res) <span class="token keyword">=></span> {
+    fmw.<span class="token function">lookup</span>(req, res)
+  }
+})
+
+fmw.<span class="token function">on</span>(<span class="token string">'GET'</span>, <span class="token string">'/fast'</span>, (req, res) <span class="token keyword">=></span> {
+  res.<span class="token function">end</span>(<span class="token string">'Radix tree routing!'</span>)
+})</code></pre>
+              </div>
+            </div>
+
+            <!-- Example 9: Streaming Response -->
+            <div class="example-card">
+              <h3 class="example-title">Streaming Response</h3>
+              <div class="code-snippet">
+                <pre><code>router.<span class="token function">get</span>(<span class="token string">'/stream'</span>, (req, res) <span class="token keyword">=></span> {
+  res.<span class="token function">setHeader</span>(<span class="token string">'Content-Type'</span>, <span class="token string">'text/plain; charset=utf-8'</span>)
+
+  <span class="token keyword">let</span> i <span class="token keyword">=</span> <span class="token number">0</span>
+  <span class="token keyword">const</span> interval <span class="token keyword">=</span> <span class="token function">setInterval</span>(() <span class="token keyword">=></span> {
+    i<span class="token keyword">++</span>
+    res.<span class="token function">write</span>(<span class="token string">`chunk </span><span class="token interpolation">${i}</span><span class="token string">\n`</span>)
+
+    <span class="token keyword">if</span> (i <span class="token keyword">===</span> <span class="token number">5</span>) {
+      <span class="token function">clearInterval</span>(interval)
+      res.<span class="token function">end</span>(<span class="token string">'done'</span>)
     }
-  </script>
-  <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  }, <span class="token number">500</span>)
+})</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <script src="https://unpkg.com/docsify-copy-code@2"></script>
-  <script src="https://unpkg.com/docsify-share/build/index.min.js"></script>
+      <section id="benchmarks" class="benchmarks">
+        <div class="container">
+          <h2 class="section-title">Benchmarks</h2>
+          <p class="section-subtitle">0http is designed for extreme performance.</p>
 
-  <script type="text/javascript" charset="UTF-8"
-    src="//cdn.cookie-script.com/s/28dc51cd1b79414f499d222fffd2095d.js"></script>
-    
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T6J7SYCVPE"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+          <img src="Benchmarks.png" alt="Performance Benchmarks" />
 
-    gtag('config', 'G-T6J7SYCVPE');
-  </script>
-</body>
+          <div
+            style="
+              max-width: 600px;
+              margin: 0 auto;
+              text-align: left;
+              background: var(--secondary-bg);
+              padding: 2rem;
+              border-radius: 8px;
+              border: 1px solid var(--border-color);
+            "
+          >
+            <h4 style="color: var(--heading-color); margin-bottom: 1rem">Snapshot (MacBook Pro i9, Node v12)</h4>
+            <ul style="list-style: none; color: #94a3b8">
+              <li style="margin-bottom: 0.5rem">
+                <strong style="color: var(--accent-color)">0http (sequential)</strong>: ~88k req/sec
+              </li>
+              <li style="margin-bottom: 0.5rem">
+                <strong style="color: var(--accent-color)">0http (find-my-way)</strong>: ~87k req/sec
+              </li>
+              <li><strong>restana</strong>: ~73k req/sec</li>
+            </ul>
+            <p style="margin-top: 1.5rem; font-size: 0.9rem">
+              Check the latest independent results:
+              <a
+                href="https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana"
+                target="_blank"
+                >Web Frameworks Benchmark</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
 
+    <footer>
+      <div class="container">
+        <div class="footer-links">
+          <a href="https://github.com/jkyberneees/0http" target="_blank">GitHub</a>
+          <a href="https://www.npmjs.com/package/0http" target="_blank">NPM</a>
+        </div>
+        <p class="footer-text">© 2025 <a href="https://21no.de/">21no.de</a> • Open source under the MIT License.</p>
+      </div>
+    </footer>
+
+    <script>
+      function switchTab(lang) {
+        // Hide all contents
+        document.querySelectorAll(".code-content").forEach((el) => (el.style.display = "none"));
+        // Show selected
+        document.getElementById("code-" + lang).style.display = "block";
+
+        // Update buttons
+        document.querySelectorAll(".tab-btn").forEach((el) => el.classList.remove("active"));
+        event.target.classList.add("active");
+      }
+
+      // Smooth reveal animation on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      }, observerOptions);
+
+      // Observe all feature cards and sections
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".feature-card, .capability-item, .ecosystem-card").forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(20px)";
+          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          observer.observe(el);
+        });
+      });
+
+      // Enhanced copy to clipboard with visual feedback
+      function copyToClipboard(text, element) {
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = element.innerHTML;
+          element.innerHTML = '<span style="color: var(--accent-color);">✓ Copied to clipboard!</span>';
+          setTimeout(() => {
+            element.innerHTML = originalText;
+          }, 2000);
+        });
+      }
+
+      // Scroll to top button
+      const scrollBtn = document.createElement("button");
+      scrollBtn.innerHTML = "↑";
+      scrollBtn.className = "scroll-to-top";
+      scrollBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+      document.body.appendChild(scrollBtn);
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          scrollBtn.classList.add("visible");
+        } else {
+          scrollBtn.classList.remove("visible");
+        }
+      });
+    </script>
+  </body>
 </html>

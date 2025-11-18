@@ -5,17 +5,38 @@
 [![TypeScript support](https://badgen.net/npm/types/0http)](https://www.npmjs.com/package/0http)
 [![Github stars](https://badgen.net/github/stars/jkyberneees/0http?icon=github)](https://github.com/jkyberneees/0http)
 
-<img src="0http-logo.svg" width="400">  
+<br/>
+<div align="center">
+  <img src="0http-logo.svg" width="400" alt="0http Logo">
+  <br/>
+  <br/>
+  <b>Zero friction HTTP framework for Node.js</b>
+  <br/>
+  <i>Tweaked for high throughput, low overhead, and maximum flexibility.</i>
+</div>
+<br/>
 
-Zero friction HTTP framework:
-- Tweaked Node.js HTTP server for high throughput.
-- High-performance and customizable request routers. 
+## Why 0http?
 
-![Performance Benchmarks](Benchmarks.png)
-> Check it yourself: https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana
+- 🚀 **Blazing Fast**: One of the fastest Node.js web frameworks. Optimized for speed with smart caching and efficient routing.
+- 🛠 **Highly Configurable**: Swap routers, servers, and customize behavior to fit your needs.
+- 🔌 **Middleware Support**: Express-like middleware chain with full `async/await` support.
+- ʦ **TypeScript Ready**: First-class TypeScript support for type-safe development.
+- 🧩 **Nested Routing**: Powerful nested router support for modular architectures, optimized for static paths.
+- 🛡️ **Production Ready**: Secure defaults with environment-aware error handling.
 
-# Usage
-JavaScript:
+---
+
+## Installation
+
+```bash
+npm install 0http
+```
+
+## Quick Start
+
+### JavaScript
+
 ```js
 const zero = require('0http')
 const { router, server } = zero()
@@ -25,17 +46,17 @@ router.get('/hello', (req, res) => {
 })
 
 router.post('/do', (req, res) => {
-  // ...
   res.statusCode = 201
-  res.end()
+  res.end('Done!')
 })
 
-//...
-
-server.listen(3000)
+server.listen(3000, () => {
+  console.log('Server listening on port 3000')
+})
 ```
 
-TypeScript:
+### TypeScript
+
 ```ts
 import zero from '0http'
 import { Protocol } from '0http/common'
@@ -43,85 +64,78 @@ import { Protocol } from '0http/common'
 const { router, server } = zero<Protocol.HTTP>()
 
 router.use((req, res, next) => {
+  console.log('Request received')
   return next()
 })
 
 router.get('/hi', (req, res) => {
-  res.end(`Hello World from TS!`)
+  res.end('Hello World from TS!')
 })
 
 server.listen(3000)
 ```
 
-# Routers
-`0http` allows you to define the router implementation you prefer as soon as it support the following interface:
-```js
-router.lookup = (req, res) // -> should trigger router search and handlers execution
-```
+---
 
-## 0http - sequential (default router)
-This a `0http` extended implementation of the [trouter](https://www.npmjs.com/package/trouter) router. Includes support for middlewares, nested routers and shortcuts for routes registration.  
-As this is an iterative regular expression matching router, it tends to be slower than `find-my-way` when the number of registered routes increases; to mitigate this issue, we use 
-an internal(optional) LRU cache to store the matching results of the previous requests, resulting on a super-fast matching process.
+## Core Capabilities
 
-Supported HTTP verbs: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
+### 1. Pluggable Routers
+`0http` allows you to define the router implementation you prefer.
 
-```js
-const zero = require('0http')
-const { router, server } = zero({})
-
-// global middleware example
-router.use('/', (req, res, next) => {
-  res.write('Hello ')
-  next()
-})
-
-// route middleware example
-const routeMiddleware = (req, res, next) => {
-  res.write('World')
-  next()
-}
-
-// GET /sayhi route with middleware and handler
-router.get('/sayhi', routeMiddleware, (req, res) => {
-  res.end('!')
-})
-
-server.listen(3000)
-```
-### Configuration Options
-- **defaultRoute**: Route handler when there is no router matching. Default value:
-  ```js 
-  (req, res) => {
-    res.statusCode = 404
-    res.end()
-  }
-  ```
-- **cacheSize**: The size of the LRU cache for router matching. If the value is `0`, the cache will be disabled. If the value is `<0`, the cache will have an unlimited size. If the value is `>0`, an LRU Cache will be used. Default value: `-1`, for extreme performance.
-- **errorHandler**: Global error handler function. Default value: 
-  
-  ```js 
-  (err, req, res) => {
-    res.statusCode = 500
-    res.end(err.message)
-  }
-  ```
-
-* **prioRequestsProcessing**: `true` to use SetImmediate to prioritize router lookup, `false` to disable. By default `true`, if used with native Node.js `http` and `https` servers. Set to `false`, if using Node.js Native Addon server, such as uWebSockets.js, as this will cause a huge performance penalty
-
-Example passing configuration options:
+#### Sequential Router (Default)
+An extended implementation of [trouter](https://www.npmjs.com/package/trouter).
+- **Features**: Middleware support, nested routers, regex matching.
+- **Performance**: Uses an internal LRU cache (optional) to store matching results, making it extremely fast even with many routes.
+- **Supported Verbs**: `GET, HEAD, PATCH, OPTIONS, CONNECT, DELETE, TRACE, POST, PUT`
 
 ```js
 const sequential = require('0http/lib/router/sequential')
-const { router, server } = zero({
+const { router } = zero({
   router: sequential({
-    cacheSize: 2000
+    cacheSize: 2000 // Configurable cache size
   })
 })
 ```
 
-### Async middlewares
-You can use async middlewares to await the remaining chain execution. Let's describe with a custom error handler middleware:
+#### Find-My-Way Router
+Integration with [find-my-way](https://github.com/delvedor/find-my-way), a super-fast Radix Tree router.
+- **Best for**: Static paths and high performance without regex overhead.
+- **Note**: Does not support all the middleware goodies of the sequential router.
+
+```js
+const { router } = zero({
+  router: require('find-my-way')()
+})
+```
+
+### 2. Middleware Engine
+The middleware engine is optimized for performance and flexibility.
+
+#### Global & Route Middleware
+```js
+// Global middleware
+router.use('/', (req, res, next) => {
+  res.setHeader('X-Powered-By', '0http')
+  next()
+})
+
+// Route-specific middleware
+const auth = (req, res, next) => {
+  if (!req.headers.authorization) {
+    res.statusCode = 401
+    return res.end('Unauthorized')
+  }
+  next()
+}
+
+router.get('/protected', auth, (req, res) => {
+  res.end('Secret Data')
+})
+```
+
+#### Async/Await Support
+Fully supports async middlewares for clean code.
+
 ```js
 router.use('/', async (req, res, next) => {
   try {
@@ -131,91 +145,90 @@ router.use('/', async (req, res, next) => {
     res.end(err.message)
   }
 })
-
-router.get('/sayhi', (req, res) => {
-  throw new Error('Uuuups!')
-})
 ```
 
-### Nested Routers
-You can simply use `sequential` router instances as nested routers:
-```js
-const zero = require('../index')
-const { router, server } = zero({})
+### 3. Nested Routers
+Organize your application with modular nested routers. `0http` optimizes static nested routes for better performance.
 
-const nested = require('0http/lib/router/sequential')()
-nested.get('/url', (req, res, next) => {
-  res.end(req.url)      
-})
-router.use('/v1', nested)
-
-server.listen(3000)
-```
-
-## find-my-way router
-> https://github.com/delvedor/find-my-way  
-
-Super-fast raw HTTP router with no goodies. Internally uses a [Radix Tree](https://en.wikipedia.org/wiki/Radix_tree) 
-router that will bring better performance over iterative regular expressions matching. 
-```js
-const zero = require('../index')
-const { router, server } = zero({
-  router: require('find-my-way')()
-})
-
-router.on('GET', '/hi', (req, res) => {
-  res.end('Hello World!')
-})
-
-server.listen(3000)
-```
-
-# Servers
-`0http` is just a wrapper for the servers and routers implementations you provide. 
 ```js
 const zero = require('0http')
+const { router, server } = zero()
+
+const v1 = require('0http/lib/router/sequential')()
+
+v1.get('/users', (req, res) => res.end('User List'))
+v1.get('/posts', (req, res) => res.end('Post List'))
+
+// Mount the nested router
+router.use('/api/v1', v1)
+
+server.listen(3000)
+```
+
+### 4. Custom Servers
+`0http` is server-agnostic. You can use the standard Node.js `http.Server`, `https.Server`, or even custom implementations.
+
+```js
+const https = require('https')
+const fs = require('fs')
+const zero = require('0http')
+
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+}
 
 const { router, server } = zero({
-  server: yourCustomServerInstance
+  server: https.createServer(options)
 })
+
+server.listen(443)
 ```
 
-## Node.js http.Server 
-If no server is provided by configuration, the standard Node.js [http.Server](https://nodejs.org/api/http.html#http_class_http_server) implementation is used.  
-Because this server offers the best balance between Node.js ecosystem compatibility and performance, we highly recommend it for most use cases.
+---
 
-# Benchmarks (30/12/2019)
-**Node version**: v12.14.0  
-**Laptop**: MacBook Pro 2019, 2,4 GHz Intel Core i9, 32 GB 2400 MHz DDR4  
-**Server**: Single instance
+## Configuration Options
 
-```bash
-wrk -t8 -c40 -d5s http://127.0.0.1:3000/hi
-```
+Pass a configuration object to `zero(config)`:
 
-## 1 route registered
-- 0http (sequential)   
-  `Requests/sec:  88438.69`
-- 0http (find-my-way)   
-  `Requests/sec:  87597.44`
-- restana v3.4.2   
-  `Requests/sec:  73455.97`
+| Option | Description | Default |
+|--------|-------------|---------|
+| `router` | Custom router instance. | `sequential()` |
+| `server` | Custom server instance. | `http.createServer()` |
+| `defaultRoute` | Handler for 404 Not Found. | `(req, res) => { res.statusCode = 404; res.end() }` |
+| `errorHandler` | Global error handler. | Production-safe error handler (hides stack traces in prod). |
+| `prioRequestsProcessing` | Use `setImmediate` to prioritize request processing. | `true` (for Node.js http/https) |
 
-## 5 routes registered
-- **0http (sequential)**  
-  `Requests/sec:  85839.17`
-- 0http (find-my-way)   
-  `Requests/sec:  82682.86`
+### Sequential Router Options
+| Option | Description | Default |
+|--------|-------------|---------|
+| `cacheSize` | LRU cache size. `0` to disable, `<0` for unlimited. | `-1` (Unlimited) |
 
-> For more accurate benchmarks please see:
->
-> - https://github.com/the-benchmarker/web-frameworks
+---
 
-# Support / Donate 💚
-You can support the maintenance of this project: 
-- PayPal: https://www.paypal.me/kyberneees
-- [TRON](https://www.binance.com/en/buy-TRON) Wallet: `TJ5Bbf9v4kpptnRsePXYDvnYcYrS5Tyxus`
+## Benchmarks
 
-# Breaking Changes:
-## 3.x
-- Low HTTP server implementation was moved to: https://github.com/jkyberneees/low-http-server
+![Performance Benchmarks](Benchmarks.png)
+
+> **Note**: Benchmarks are subject to hardware and environment.
+> Check the latest independent results: [Web Frameworks Benchmark](https://web-frameworks-benchmark.netlify.app/result?f=feathersjs,0http,koa,fastify,nestjs-express,express,sails,nestjs-fastify,restana)
+
+**Snapshot (MacBook Pro i9, Node v12):**
+- **0http (sequential)**: ~88k req/sec
+- **0http (find-my-way)**: ~87k req/sec
+- **restana**: ~73k req/sec
+
+---
+
+## Ecosystem
+
+- **[low-http-server](https://github.com/jkyberneees/low-http-server)**: A low-level HTTP server implementation for extreme performance, originally part of 0http.
+
+## Support
+
+If you love this project, consider supporting its maintenance:
+- **PayPal**: [Donate](https://www.paypal.me/kyberneees)
+
+## License
+
+MIT

@@ -28,6 +28,20 @@ describe('v4.4 Improvements', () => {
         .expect('Internal Server Error')
     })
 
+    it('should hide error message when NODE_ENV is unset', async () => {
+      delete process.env.NODE_ENV
+      const { router, server } = cero()
+
+      router.get('/error', (req, res, next) => {
+        next(new Error('Sensitive Info'))
+      })
+
+      await request(server)
+        .get('/error')
+        .expect(500)
+        .expect('Internal Server Error')
+    })
+
     it('should show error message in development', async () => {
       process.env.NODE_ENV = 'development'
       const { router, server } = cero()

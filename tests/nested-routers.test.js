@@ -98,7 +98,7 @@ describe('0http - Nested Routers', () => {
       .get('/r2/rolando/throw')
       .expect(500)
       .then((response) => {
-        expect(response.text).to.equals('nested error')
+        expect(response.text).to.equals('Internal Server Error')
       })
   })
 

@@ -161,7 +161,7 @@ describe('0http - Router Coverage', () => {
         .get('/error')
         .expect(500)
         .then((response) => {
-          expect(response.text).to.equal('Intentional error')
+          expect(response.text).to.equal('Internal Server Error')
         })
     })
 

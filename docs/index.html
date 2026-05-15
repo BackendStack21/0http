@@ -138,36 +138,6 @@
     .n { color: #f78c6c; } /* number */
     .c { color: #676e95; } /* comment */
 
-    /* ── Benchmarks ── */
-    .benchmarks-img {
-      max-width: 800px; margin: 32px auto;
-      border: 1px solid var(--border-card); border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-    .benchmarks-img img { width: 100%; display: block; }
-    .benchmarks-snapshot {
-      max-width: 520px; margin: 0 auto; text-align: left;
-      background: var(--bg-card); padding: 24px; border-radius: var(--radius-md);
-      border: 1px solid var(--border-card);
-    }
-    .benchmarks-snapshot h4 {
-      color: var(--text-primary); margin-bottom: 14px; font-size: 15px;
-    }
-    .benchmarks-snapshot .bar {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
-    }
-    .benchmarks-snapshot .bar .name {
-      width: 160px; font-size: 13px; font-family: var(--font-mono); color: var(--text-secondary);
-    }
-    .benchmarks-snapshot .bar .fill {
-      height: 8px; border-radius: 4px; background: var(--accent); transition: width 0.6s ease;
-    }
-    .benchmarks-snapshot .bar .rps {
-      font-size: 13px; font-family: var(--font-mono); color: var(--text-primary); min-width: 90px;
-      text-align: right;
-    }
-    .benchmarks-link { margin-top: 20px; font-size: 13px; text-align: center; }
-
     /* ── Config Table ── */
     .config-table {
       width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 24px;
@@ -206,7 +176,6 @@
       .hero-stats { gap: 20px; }
       .config-table { font-size: 12px; }
       .config-table td, .config-table th { padding: 8px 10px; }
-      .benchmarks-snapshot .bar .name { width: 100px; }
     }
   </style>
 </head>
@@ -222,7 +191,6 @@
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#examples">Examples</a>
-      <a href="#benchmarks">Benchmarks</a>
       <a href="https://github.com/BackendStack21/0http" target="_blank">GitHub</a>
       <a href="#install" class="nav-cta">Install</a>
     </div>
@@ -435,41 +403,6 @@ router.<span class="f">get</span>(<span class="s">'/broken'</span>, () => {
   </div>
 </section>
 
-<!-- Benchmarks -->
-<section id="benchmarks" class="section">
-  <div class="container">
-    <div class="section-label">Performance</div>
-    <h2>Benchmarks</h2>
-    <p class="lead">0http is designed for extreme speed from the ground up.</p>
-
-    <div class="benchmarks-img">
-      <img src="Benchmarks.png" alt="0http Performance Benchmarks" />
-    </div>
-
-    <div class="benchmarks-snapshot">
-      <h4>Snapshot — MacBook Pro i9, Node.js v12</h4>
-      <div class="bar">
-        <span class="name">0http (seq)</span>
-        <span class="fill" style="width:100%"></span>
-        <span class="rps">~88K req/s</span>
-      </div>
-      <div class="bar">
-        <span class="name">0http (fmw)</span>
-        <span class="fill" style="width:99%"></span>
-        <span class="rps">~87K req/s</span>
-      </div>
-      <div class="bar">
-        <span class="name">restana</span>
-        <span class="fill" style="width:83%"></span>
-        <span class="rps">~73K req/s</span>
-      </div>
-      <div class="benchmarks-link">
-        <a href="https://web-frameworks-benchmark.netlify.app/result?f=0http,koa,fastify,express,restana" target="_blank">View latest independent results →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Configuration -->
 <section id="config" class="section">
   <div class="container">
@@ -531,7 +464,7 @@ router.<span class="f">get</span>(<span class="s">'/broken'</span>, () => {
     })
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' })
 
-  document.querySelectorAll('.feature-card, .capability-item, .example-card, .benchmarks-snapshot').forEach(el => {
+  document.querySelectorAll('.feature-card, .capability-item, .example-card').forEach(el => {
     el.style.opacity = '0'
     el.style.transform = 'translateY(20px)'
     el.style.transition = 'opacity 0.6s ease, transform 0.6s ease'
@@ -540,7 +473,7 @@ router.<span class="f">get</span>(<span class="s">'/broken'</span>, () => {
 
   // Trigger initial animation for visible elements
   setTimeout(() => {
-    document.querySelectorAll('.feature-card, .capability-item, .example-card, .benchmarks-snapshot').forEach(el => {
+    document.querySelectorAll('.feature-card, .capability-item, .example-card').forEach(el => {
       const rect = el.getBoundingClientRect()
       if (rect.top < window.innerHeight) {
         el.style.opacity = '1'

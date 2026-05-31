@@ -309,6 +309,23 @@ describe('0http - Router Coverage', () => {
       expect(req.path).to.equal('/path')
       expect(req.query).to.deep.equal({ param: '' })
     })
+
+    it('should group repeated and array-notation parameters', () => {
+      const req = {}
+      queryparams(req, '/path?id[]=1&id[]=2&name=a&name=b&tag=x')
+      expect(req.query).to.deep.equal({ id: ['1', '2'], name: ['a', 'b'], tag: 'x' })
+    })
+
+    it('should strip dangerous prototype-pollution keys', () => {
+      const req = {}
+      queryparams(req, '/path?__proto__=evil&prototype=z&user.constructor=bad&a[__proto__]=x&ok=1')
+      // Dangerous keys are dropped; the query object has no prototype.
+      expect(Object.getPrototypeOf(req.query)).to.equal(null)
+      expect(req.query.ok).to.equal('1')
+      expect(Object.keys(req.query)).to.deep.equal(['ok'])
+      // No pollution leaked onto Object.prototype.
+      expect(({}).evil).to.equal(undefined)
+    })
   })
 
   describe('Next Middleware Executor', () => {

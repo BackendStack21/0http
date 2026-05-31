@@ -46,7 +46,6 @@ server.listen(3000)
 # Support / Donate 💚
 You can support the maintenance of this project: 
 - PayPal: https://www.paypal.me/kyberneees
-- [TRON](https://www.binance.com/en/buy-TRON) Wallet: `TJ5Bbf9v4kpptnRsePXYDvnYcYrS5Tyxus`
 
 # More
 - Website and documentation: https://0http.21no.de

@@ -1,6 +1,6 @@
 {
   "name": "0http",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Zero friction HTTP request router. The need for speed!",
   "main": "index.js",
   "scripts": {

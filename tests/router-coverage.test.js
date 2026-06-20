@@ -462,5 +462,69 @@ describe('0http - Router Coverage', () => {
       expect(req.preRouterPath).to.equal('/prefix')
       expect(req.url).to.equal('/')
     })
+
+    it('should restore URL when nested router lookup throws synchronously', () => {
+      const req = { url: '/prefix/test', path: '/prefix/test' }
+      const res = {}
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: () => {
+          throw new Error('lookup failure')
+        }
+      }
+      const routers = {
+        'nested-router': /^\/prefix/
+      }
+      const defaultRoute = () => {}
+      const errorHandler = (err, req, res) => {
+        res.error = err.message
+      }
+
+      next([nestedRouter], req, res, 0, routers, defaultRoute, errorHandler)
+      expect(res.error).to.equal('lookup failure')
+      expect(req.url).to.equal('/prefix/test')
+      expect(req.preRouterUrl).to.equal(undefined)
+    })
+
+    it('should restore URL when nested router lookup rejects asynchronously', async () => {
+      const req = { url: '/prefix/test', path: '/prefix/test' }
+      const res = {}
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: () => {
+          return Promise.reject(new Error('async lookup failure'))
+        }
+      }
+      const routers = {
+        'nested-router': /^\/prefix/
+      }
+      const defaultRoute = () => {}
+      const errorHandler = (err, req, res) => {
+        res.error = err.message
+      }
+
+      await next([nestedRouter], req, res, 0, routers, defaultRoute, errorHandler)
+      expect(res.error).to.equal('async lookup failure')
+      expect(req.url).to.equal('/prefix/test')
+      expect(req.preRouterUrl).to.equal(undefined)
+    })
+
+    it('should expose the error handler on the step function for nested routers', () => {
+      const req = { url: '/test', path: '/test' }
+      const res = {}
+      let capturedStep = null
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: (req, res, step) => {
+          capturedStep = step
+          step()
+        }
+      }
+      const defaultRoute = () => {}
+      const errorHandler = () => {}
+
+      next([nestedRouter], req, res, 0, {}, defaultRoute, errorHandler)
+      expect(capturedStep.errorHandler).to.equal(errorHandler)
+    })
   })
 })

@@ -11,6 +11,7 @@ describe('0http - Nested Router Error Handling', () => {
       let capturedOriginalUrl = null
 
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         capturedUrl = req.url
         capturedOriginalUrl = req.originalUrl
         res.statusCode = 500
@@ -41,6 +42,7 @@ describe('0http - Nested Router Error Handling', () => {
       let capturedUrl = null
 
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         capturedUrl = req.url
         res.statusCode = 500
         res.end('error')
@@ -68,6 +70,7 @@ describe('0http - Nested Router Error Handling', () => {
       let capturedUrl = null
 
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         capturedUrl = req.url
         res.statusCode = 500
         res.end('error')
@@ -97,6 +100,7 @@ describe('0http - Nested Router Error Handling', () => {
       let parentHandlerCalled = false
 
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         parentHandlerCalled = true
         res.statusCode = 500
         res.end('parent handled')
@@ -123,6 +127,7 @@ describe('0http - Nested Router Error Handling', () => {
   describe('full server integration', () => {
     it('should return parent error response for nested router errors', (done) => {
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         res.statusCode = 500
         res.end('parent-handled')
       }
@@ -157,6 +162,7 @@ describe('0http - Nested Router Error Handling', () => {
       const loggedUrls = []
 
       const errorHandler = (err, req, res) => {
+        expect(err).to.be.an('error')
         loggedUrls.push(req.url)
         res.statusCode = 500
         res.end('error')

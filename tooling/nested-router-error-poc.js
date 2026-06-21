@@ -10,6 +10,7 @@
 const sequential = require('../lib/router/sequential')
 
 const errorHandler = (err, req, res) => {
+  console.log('Error handler saw err:', err.message)
   console.log('Error handler saw req.url:', JSON.stringify(req.url))
   console.log('Error handler saw req.originalUrl:', JSON.stringify(req.originalUrl))
   console.log('Error handler saw req.preRouterUrl:', JSON.stringify(req.preRouterUrl))

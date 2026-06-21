@@ -69,7 +69,7 @@ console.log('└─────────────────────�
   resetProto()
   const router = sequential()
   router.get('/:__proto__', (req, res) => {
-    res.end(req.params.__proto__ || 'ok')
+    res.end('ok')
   })
   const req = createMockReq('GET', '/pollute')
   const res = createMockRes()
@@ -83,7 +83,7 @@ console.log('└─────────────────────�
   resetProto()
   const router = sequential()
   router.get('/:constructor', (req, res) => {
-    res.end(req.params.constructor || 'ok')
+    res.end('ok')
   })
   const req = createMockReq('GET', '/pollute')
   const res = createMockRes()
@@ -97,7 +97,7 @@ console.log('└─────────────────────�
   resetProto()
   const router = sequential()
   router.get('/:role/:__proto__', (req, res) => {
-    res.end(JSON.stringify(req.params))
+    res.end('ok')
   })
   const req = createMockReq('GET', '/user/pollute')
   const res = createMockRes()
@@ -143,6 +143,7 @@ console.log('└─────────────────────�
   parent.use('/api', child)
 
   const errorHandler = (err, req, res) => {
+    if (!err) console.error('expected an error but got none')
     capturedUrl = req.url
     capturedOriginalUrl = req.originalUrl
     res.statusCode = 500
@@ -171,6 +172,7 @@ console.log('└─────────────────────�
 
 ;(() => {
   const errorHandler = (err, req, res) => {
+    if (!err) console.error('expected an error but got none')
     req._capturedUrl = req.url
     req._capturedPath = req.path
     res.statusCode = 500
@@ -197,6 +199,7 @@ console.log('└─────────────────────�
 
 ;(() => {
   const errorHandler = (err, req, res) => {
+    if (!err) console.error('expected an error but got none')
     req._capturedUrl = req.url
     res.statusCode = 500
     res.end('error')
@@ -379,7 +382,6 @@ console.log('└─────────────────────�
 
 ;(() => {
   const { router, server } = zero()
-  let captured = null
 
   const child = require('../lib/router/sequential')()
   child.get('/crash', (req, res) => {

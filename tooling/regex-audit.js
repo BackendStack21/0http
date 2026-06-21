@@ -34,16 +34,6 @@ function createMockRes () {
   }
 }
 
-function hit (router, url) {
-  let called = false
-  const testRouter = sequential({ cacheSize: 0 })
-  router._testRoutes(testRouter, () => { called = true })
-  const req = { method: 'GET', url, headers: {} }
-  const res = createMockRes()
-  testRouter.lookup(req, res)
-  return called
-}
-
 console.log('\n┌─────────────────────────────────────────────────┐')
 console.log('│ REGEX SECURITY AUDIT                            │')
 console.log('└─────────────────────────────────────────────────┘')

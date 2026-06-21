@@ -188,6 +188,26 @@ describe('0http - Router Coverage', () => {
       expect(req.url).to.equal('/')
     })
 
+    it('should coerce non-string URL to string in lookup without crashing', () => {
+      const router = require('../lib/router/sequential')()
+
+      router.get('/test', (req, res, next) => {
+        res.called = true
+        next()
+      })
+
+      const req = { method: 'GET', url: 42 }
+      const res = {
+        end: () => {},
+        statusCode: 200
+      }
+
+      // Should not throw; URL is stringified and normalized to start with '/'
+      router.lookup(req, res)
+
+      expect(req.url).to.be.a('string')
+    })
+
     it('should handle undefined params', async () => {
       await request(baseUrl)
         .get('/empty-params')
@@ -281,6 +301,57 @@ describe('0http - Router Coverage', () => {
       await request(baseUrl)
         .get('/non-existent-route')
         .expect(404)
+    })
+
+    it('should normalize RegExp global flag to avoid lastIndex corruption', () => {
+      const router = require('../lib/router/sequential')({ cacheSize: 0 })
+      let hits = 0
+      router.get(/^\/global-test$/g, (req, res, next) => {
+        hits++
+        next()
+      })
+
+      for (let i = 0; i < 4; i++) {
+        const req = { method: 'GET', url: '/global-test' }
+        const res = { end: () => {}, statusCode: 200 }
+        router.lookup(req, res)
+      }
+
+      expect(hits).to.equal(4)
+    })
+
+    it('should normalize RegExp sticky flag to avoid lastIndex corruption', () => {
+      const router = require('../lib/router/sequential')({ cacheSize: 0 })
+      let hits = 0
+      router.get(/^\/sticky-test$/y, (req, res, next) => {
+        hits++
+        next()
+      })
+
+      for (let i = 0; i < 4; i++) {
+        const req = { method: 'GET', url: '/sticky-test' }
+        const res = { end: () => {}, statusCode: 200 }
+        router.lookup(req, res)
+      }
+
+      expect(hits).to.equal(4)
+    })
+
+    it('should preserve safe RegExp flags while stripping global/sticky', () => {
+      const router = require('../lib/router/sequential')({ cacheSize: 0 })
+      let hits = 0
+      router.get(/^\/mixed-test$/gims, (req, res, next) => {
+        hits++
+        next()
+      })
+
+      for (const url of ['/mixed-test', '/MIXED-TEST', '/mixed-test\nextra']) {
+        const req = { method: 'GET', url }
+        const res = { end: () => {}, statusCode: 200 }
+        router.lookup(req, res)
+      }
+
+      expect(hits).to.equal(3)
     })
 
     after(() => {
@@ -461,6 +532,70 @@ describe('0http - Router Coverage', () => {
       expect(req.preRouterUrl).to.equal('/prefix')
       expect(req.preRouterPath).to.equal('/prefix')
       expect(req.url).to.equal('/')
+    })
+
+    it('should restore URL when nested router lookup throws synchronously', () => {
+      const req = { url: '/prefix/test', path: '/prefix/test' }
+      const res = {}
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: () => {
+          throw new Error('lookup failure')
+        }
+      }
+      const routers = {
+        'nested-router': /^\/prefix/
+      }
+      const defaultRoute = () => {}
+      const errorHandler = (err, req, res) => {
+        res.error = err.message
+      }
+
+      next([nestedRouter], req, res, 0, routers, defaultRoute, errorHandler)
+      expect(res.error).to.equal('lookup failure')
+      expect(req.url).to.equal('/prefix/test')
+      expect(req.preRouterUrl).to.equal(undefined)
+    })
+
+    it('should restore URL when nested router lookup rejects asynchronously', async () => {
+      const req = { url: '/prefix/test', path: '/prefix/test' }
+      const res = {}
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: () => {
+          return Promise.reject(new Error('async lookup failure'))
+        }
+      }
+      const routers = {
+        'nested-router': /^\/prefix/
+      }
+      const defaultRoute = () => {}
+      const errorHandler = (err, req, res) => {
+        res.error = err.message
+      }
+
+      await next([nestedRouter], req, res, 0, routers, defaultRoute, errorHandler)
+      expect(res.error).to.equal('async lookup failure')
+      expect(req.url).to.equal('/prefix/test')
+      expect(req.preRouterUrl).to.equal(undefined)
+    })
+
+    it('should expose the error handler on the step function for nested routers', () => {
+      const req = { url: '/test', path: '/test' }
+      const res = {}
+      let capturedStep = null
+      const nestedRouter = {
+        id: 'nested-router',
+        lookup: (req, res, step) => {
+          capturedStep = step
+          step()
+        }
+      }
+      const defaultRoute = () => {}
+      const errorHandler = () => {}
+
+      next([nestedRouter], req, res, 0, {}, defaultRoute, errorHandler)
+      expect(capturedStep.errorHandler).to.equal(errorHandler)
     })
   })
 })

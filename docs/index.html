@@ -50,6 +50,17 @@
     }
     .hero h1 { margin-bottom: 12px; }
     .hero h1 .accent { white-space: nowrap; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px; margin: 0 auto 20px;
+      padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 500;
+      color: var(--accent); background: var(--accent-subtle); border: 1px solid rgba(56,189,248,0.25);
+    }
+    .hero-badge .tag {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+      padding: 2px 7px; border-radius: 6px; background: var(--accent); color: #0b1220;
+    }
+    .hero-badge a { color: inherit; text-decoration: none; }
+    .hero-badge a:hover { text-decoration: underline; }
 
     /* ── Stats ── */
     .hero-stats {
@@ -201,21 +212,23 @@
 <section class="hero">
   <div class="container">
     <div class="hero-logo">0</div>
+    <div class="hero-badge"><span class="tag">NEW</span><a href="#trie-router">v5.2 ships the Trie router: 2&times; faster static routes, flat cost at any route count &rarr;</a></div>
     <h1>
       Zero friction HTTP<br />
       <span class="accent">framework for Node.js</span>
     </h1>
-    <p>Tweaked for high throughput, low overhead, and maximum flexibility. The router that doesn't get in your way.</p>
+    <p>Tweaked for high throughput, low overhead, and maximum flexibility. The router that doesn't get in your way &mdash; now with a dependency-free trie engine that resolves static routes in ~80ns.</p>
     <div class="hero-actions">
       <a href="#install" class="btn btn-primary">Get Started</a>
+      <a href="#trie-router" class="btn btn-secondary">Meet the Trie Router</a>
       <a href="https://github.com/BackendStack21/0http" target="_blank" class="btn btn-secondary">View on GitHub</a>
     </div>
     <div class="hero-stats">
       <div class="stat"><span class="num">88K+</span><div class="label">req/sec</div></div>
-      <div class="stat"><span class="num">&lt;1ms</span><div class="label">overhead</div></div>
-      <div class="stat"><span class="num">2</span><div class="label">router engines</div></div>
-      <div class="stat"><span class="num">97.7%</span><div class="label">test coverage</div></div>
-      <div class="stat"><span class="num">v5.0</span><div class="label">latest</div></div>
+      <div class="stat"><span class="num">~80ns</span><div class="label">static route lookup</div></div>
+      <div class="stat"><span class="num">2&times;</span><div class="label">faster static routes</div></div>
+      <div class="stat"><span class="num">0</span><div class="label">deps in the trie router</div></div>
+      <div class="stat"><span class="num">v5.2</span><div class="label">latest</div></div>
     </div>
   </div>
 </section>
@@ -230,7 +243,7 @@
       <div class="feature-card">
         <span class="icon">⚡</span>
         <h3>Blazing Fast</h3>
-        <p>One of the fastest Node.js web frameworks. Smart LRU caching and efficient routing keep overhead near zero.</p>
+        <p>One of the fastest Node.js web frameworks. The new trie router resolves static routes in ~80ns and keeps dynamic routes flat as your API grows &mdash; no regex per route, no cache to size.</p>
       </div>
       <div class="feature-card">
         <span class="icon">🎛</span>
@@ -250,7 +263,7 @@
       <div class="feature-card">
         <span class="icon">🧩</span>
         <h3>Nested Routing</h3>
-        <p>Modular architecture with nested routers. Static paths optimized for maximum performance.</p>
+        <p>Modular architecture with nested routers, on both engines. Mount prefixes are stripped from the path only, so a query string can never become a nested route.</p>
       </div>
       <div class="feature-card">
         <span class="icon">🛡</span>
@@ -271,7 +284,15 @@
     <div class="capability-list">
       <div class="capability-item">
         <h3>1. Pluggable Routers</h3>
-        <p>0http lets you define the router implementation you prefer. Two engines ship by default.</p>
+        <p>0http lets you define the router implementation you prefer. Three engines are supported out of the box.</p>
+        <h4 id="trie-router">Trie Router (New in v5.2)</h4>
+        <p>A dependency-free segment-trie engine with the same API, middleware chain, nested routers and error containment as the default router. Static routes resolve through a compile-on-demand table in constant time; dynamic routes walk the trie with no regex per route, so lookup cost stays flat whether you register 5 routes or 500.</p>
+        <ul>
+          <li>~80ns static lookups (2&times; faster than sequential), 175ns param lookups, flat at 500 routes where sequential climbs past 1&micro;s</li>
+          <li>Safer defaults: case-sensitive matching, literal static segments, null-prototype params, no request-keyed cache to exhaust</li>
+          <li>Patterns: <code>/static</code>, <code>/:param</code>, <code>/:param?</code>, <code>/:name.ext</code>, trailing <code>/*</code> and RegExp with named groups</li>
+          <li>Opt in with <code>require('0http/lib/router/trie')()</code></li>
+        </ul>
         <h4>Sequential Router (Default)</h4>
         <p>Extended <a href="https://www.npmjs.com/package/trouter" target="_blank">trouter</a> with middleware, nested routers, and regex matching. Uses internal LRU cache for blazing-fast repeated lookups.</p>
         <ul>
@@ -324,7 +345,24 @@
     <h2>Quick Start</h2>
     <p class="lead">Common patterns to get you moving fast.</p>
     <div class="examples-grid">
-      
+
+      <div class="example-card">
+        <span class="ex-title">trie-router.js</span>
+        <pre><code><span class="k">const</span> trie = <span class="f">require</span>(<span class="s">'0http/lib/router/trie'</span>)
+<span class="k">const</span> { router, server } = <span class="f">require</span>(<span class="s">'0http'</span>)({
+  router: <span class="f">trie</span>()
+})
+
+router.<span class="f">get</span>(<span class="s">'/users/:id'</span>, (req, res) => {
+  res.<span class="f">end</span>(req.params.id)
+})
+router.<span class="f">get</span>(<span class="s">'/files/*'</span>, (req, res) => {
+  res.<span class="f">end</span>(req.params[<span class="s">'*'</span>])
+})
+
+server.<span class="f">listen</span>(<span class="n">3000</span>)</code></pre>
+      </div>
+
       <div class="example-card">
         <span class="ex-title">basic-server.js</span>
         <pre><code><span class="k">const</span> { router, server } = <span class="f">require</span>(<span class="s">'0http'</span>)()
@@ -420,7 +458,9 @@ router.<span class="f">get</span>(<span class="s">'/broken'</span>, () => {
         <tr><td>defaultRoute</td><td>Handler for 404 Not Found</td><td>404 + res.end()</td></tr>
         <tr><td>errorHandler</td><td>Global error handler</td><td>Safe-by-default (v5.0+)</td></tr>
         <tr><td>prioRequestsProcessing</td><td>Use setImmediate for priority processing</td><td>true</td></tr>
-        <tr><td>cacheSize</td><td>LRU cache size (0=off, &lt;0=unlimited)</td><td>&minus;1</td></tr>
+        <tr><td>cacheSize</td><td>Sequential router: LRU cache size (0=off, &lt;0=unlimited)</td><td>&minus;1</td></tr>
+        <tr><td>caseSensitive</td><td>Trie router: match paths case-sensitively</td><td>true</td></tr>
+        <tr><td>ignoreTrailingSlash</td><td>Trie router: treat <code>/users/</code> and <code>/users</code> alike</td><td>true</td></tr>
       </tbody>
     </table>
   </div>

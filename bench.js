@@ -44,6 +44,11 @@ const { router: routerPrevious } = httpPrevious({
   cacheSize: 0
 })
 setupRouter(routerPrevious)
+
+const { router: routerTrie } = httpNext({
+  router: require('./lib/router/trie')({ id: '/' })
+})
+setupRouter(routerTrie)
 import('mitata').then(({ run, bench, group }) => {
   group('Routers', () => {
     bench('Next Router Parameter URL', () => {
@@ -58,6 +63,12 @@ import('mitata').then(({ run, bench, group }) => {
 
       routerPrevious.lookup(req, res)
     }).gc('inner')
+    bench('Trie Router Parameter URL', () => {
+      const req = getReqObject('/0')
+      const res = getResObject()
+
+      routerTrie.lookup(req, res)
+    }).gc('inner')
     bench('Next Router Not Found URL', () => {
       const req = getReqObject('/0/404')
       const res = getResObject()
@@ -70,6 +81,12 @@ import('mitata').then(({ run, bench, group }) => {
 
       routerPrevious.lookup(req, res)
     }).gc('inner')
+    bench('Trie Router Not Found URL', () => {
+      const req = getReqObject('/0/404')
+      const res = getResObject()
+
+      routerTrie.lookup(req, res)
+    }).gc('inner')
     bench('Next Router Error URL', () => {
       const req = getReqObject('/0/error')
       const res = getResObject()
@@ -81,6 +98,12 @@ import('mitata').then(({ run, bench, group }) => {
       const res = getResObject()
 
       routerPrevious.lookup(req, res)
+    }).gc('inner')
+    bench('Trie Router Error URL', () => {
+      const req = getReqObject('/0/error')
+      const res = getResObject()
+
+      routerTrie.lookup(req, res)
     }).gc('inner')
   })
 

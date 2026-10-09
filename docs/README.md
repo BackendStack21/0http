@@ -97,6 +97,21 @@ const { router } = zero({
 })
 ```
 
+#### Trie Router
+A dependency-free segment-trie router shipped with `0http`. Same API, middleware
+chaining, nested routers and error containment as the sequential router, with a
+different matching engine: no regex per route and no route cache to size.
+- **Best for**: APIs with many routes; constant-time static routes, flat cost for dynamic routes.
+- **Security defaults**: case-sensitive matching, literal static segments, params without `Object.prototype`, no request-keyed cache.
+- **Patterns**: `/static`, `/:param`, `/:param?`, `/:name.ext`, trailing `/*`, `RegExp` (named groups become params).
+
+```js
+const trie = require('0http/lib/router/trie')
+const { router } = zero({
+  router: trie({ caseSensitive: true, ignoreTrailingSlash: true })
+})
+```
+
 #### Find-My-Way Router
 Integration with [find-my-way](https://github.com/delvedor/find-my-way), a super-fast Radix Tree router.
 - **Best for**: Static paths and high performance without regex overhead.
@@ -203,6 +218,13 @@ Pass a configuration object to `zero(config)`:
 | Option | Description | Default |
 |--------|-------------|---------|
 | `cacheSize` | LRU cache size. `0` to disable, `<0` for unlimited. | `-1` (Unlimited) |
+
+### Trie Router Options
+| Option | Description | Default |
+|--------|-------------|---------|
+| `caseSensitive` | Match paths case-sensitively. | `true` |
+| `ignoreTrailingSlash` | Treat `/users/` and `/users` as the same path. | `true` |
+| `id` | Router identifier for nested mounting. | random |
 
 ---
 

@@ -13,8 +13,11 @@ module.exports = (config = {}) => {
     prioRequestsProcessing && (server instanceof httpServer || server instanceof httpsServer)
 
   if (server.prioRequestsProcessing) {
+    // Pass req/res as setImmediate arguments instead of closing over them:
+    // one fewer allocation per request on the dispatch path.
+    const dispatch = (req, res) => router.lookup(req, res)
     server.on('request', (req, res) => {
-      setImmediate(() => router.lookup(req, res))
+      setImmediate(dispatch, req, res)
     })
   } else {
     server.on('request', (req, res) => {
